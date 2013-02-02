@@ -14,7 +14,7 @@ or just run the following command:
 
     curl -s http://getcomposer.org/installer | php
 
-Seeing as the binary can be used to manage dependencies for all your Symfony
+Seeing as Composer can be used to manage dependencies for all your Symfony
 projects regardless of their version, it's recommended to put the composer.phar
 file into a global bin dir, e.g. /usr/bin - but you can also keep it in the
 project directory (it's included in the .gitignore file for that reason).
