@@ -8,7 +8,7 @@ Prerequisites
 
 Apache, PHP 5.3.3, MongoDB
 
-As Symfony uses [Composer][1] to manage its dependencies (the PHP equivalent to
+As Symfony uses Composer to manage its dependencies (the PHP equivalent to
 Bundler), download it following the instructions on http://getcomposer.org/
 or just run the following command:
 
