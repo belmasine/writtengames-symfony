@@ -49,3 +49,14 @@ When calling it in the browser, try using the `app_dev.php` front controller:
 
 Note the debug / profiler bar at the bottom which will be rendered in the `dev`
 environment.
+
+Structure
+---------
+
+The structure of a Symfony project is fairly simple: `app` houses the project
+configuration, `src` contains the application level source code, and `vendor`
+is where the vendor code lives.
+
+Each bundle, whether that's an application level bundle or a vendor bundle,
+has its own controllers, resources (assets, templates, bundle config), model,
+and all other classes it needs.
