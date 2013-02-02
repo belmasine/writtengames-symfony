@@ -1,5 +1,5 @@
-writtengames-symfony
-====================
+Written Games website, using Symfony 2
+======================================
 
 Symfony-based website for Written Games
 

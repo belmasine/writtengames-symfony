@@ -1,0 +1,4 @@
+
+WrittenGamesApplicationBundle:
+    resource: "@WrittenGamesApplicationBundle/Resources/config/routing.yml"
+    prefix:   /
