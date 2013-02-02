@@ -14,7 +14,9 @@ or just run the following command:
 
     curl -s http://getcomposer.org/installer | php
 
-It's recommended to put the composer.phar file into a global bin dir, e.g. /usr/bin
+Seeing as the binary can be used to manage dependencies for all your Symfony
+projects regardless of their version, it's recommended to put the composer.phar
+file into a global bin dir, e.g. /usr/bin
 
 Clone this repository:
 
