@@ -1,6 +1,10 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: "@WGOpenIdUserBundle/Resources/config/config.yml" }
+
+fos_user:
+    firewall_name: main
 
 framework:
     #esi:             ~

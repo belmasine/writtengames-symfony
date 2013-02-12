@@ -6,7 +6,7 @@ Symfony-based website for Written Games
 Prerequisites
 -------------
 
-Apache, PHP 5.3.3, MongoDB
+Apache, PHP 5.3.3, MySQL 5.5
 
 As Symfony uses Composer to manage its dependencies (the PHP equivalent to
 Bundler), download it following the instructions on http://getcomposer.org/

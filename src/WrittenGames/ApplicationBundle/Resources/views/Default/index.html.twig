@@ -2,8 +2,18 @@
 
 {% block body %}
 
-<h1>Written Games</h1>
+    <h1>Written Games</h1>
 
-<p>{{ message }}</p>
+    <p>{{ message }}</p>
+
+    {% if is_granted( 'IS_AUTHENTICATED_FULLY' ) %}
+
+        <p><a href="{{ path( 'fp_openid_security_logout' ) }}">Logout</a></p>
+
+    {% else %}
+
+        <p><a href="{{ path( 'fp_openid_security_login' ) }}">Login</a></p>
+
+    {% endif %}
 
 {% endblock %}
