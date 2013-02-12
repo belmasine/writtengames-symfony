@@ -1,10 +1,10 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: "@WGOpenIdUserBundle/Resources/config/config.yml" }
 
-fos_user:
-    firewall_name: main
+hwi_oauth:
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: secured_area
 
 framework:
     #esi:             ~

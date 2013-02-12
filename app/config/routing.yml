@@ -3,7 +3,6 @@ WrittenGamesApplicationBundle:
     resource: "@WrittenGamesApplicationBundle/Resources/config/routing.yml"
     prefix:   /
 
-openiduser_identities:
-    resource: "@WGOpenIdUserBundle/Resources/config/routing/identity.yml"
-    prefix:   /openid
-
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect

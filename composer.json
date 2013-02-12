@@ -25,7 +25,8 @@
         ,"doctrine/doctrine-fixtures-bundle": "dev-master"
         ,"twitter/bootstrap": "dev-master"
         ,"mopa/bootstrap-bundle": "dev-master"
-        ,"writtengames/openid-user-bundle": "dev-master"
+        ,"stof/doctrine-extensions-bundle": "dev-master"
+        ,"hwi/oauth-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [
