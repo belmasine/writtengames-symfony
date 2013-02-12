@@ -27,6 +27,7 @@
         ,"mopa/bootstrap-bundle": "dev-master"
         ,"stof/doctrine-extensions-bundle": "dev-master"
         ,"hwi/oauth-bundle": "*"
+        ,"friendsofsymfony/user-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [

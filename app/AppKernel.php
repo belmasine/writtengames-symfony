@@ -21,11 +21,9 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             //
             // Vendor bundles
-//            new FOS\UserBundle\FOSUserBundle(),
-//            new Fp\OpenIdBundle\FpOpenIdBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-//            new WG\OpenIdUserBundle\WGOpenIdUserBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             //
             // Application bundles
             new WrittenGames\ApplicationBundle\WrittenGamesApplicationBundle(),
