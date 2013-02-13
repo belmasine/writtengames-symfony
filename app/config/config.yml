@@ -34,12 +34,9 @@ hwi_oauth:
     firewall_name: main
     fosub:
         username_iterations: 30
-        properties:
-            google: googleId
-            facebook: facebookId
-            yahoo: yahooId
+        properties: []
     connect:
-        account_connector: my_user_provider
+        account_connector: wg.user_provider
     http_client:
         timeout:       20
         verify_peer:   true

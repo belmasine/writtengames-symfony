@@ -10,7 +10,9 @@
     <a href="{{ path( 'fos_user_security_login' ) }}">Traditional login</a>
     |
     <a href="{{ path( 'hwi_oauth_connect' ) }}">Login using external provider</a>
-    |
-    <a href="{{ path( 'fos_user_security_logout' ) }}">Logout</a>
+    {% if is_granted( 'IS_AUTHENTICATED_FULLY' ) %}
+        |
+        <a href="{{ path( 'fos_user_security_logout' ) }}">Logout</a>
+    {% endif %}
 
 {% endblock %}

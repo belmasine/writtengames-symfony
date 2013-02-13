@@ -1,8 +1,11 @@
 parameters:
-    my_user_provider.class: WrittenGames\ApplicationBundle\Security\FOSUBUserProvider
+    wg.identity_manager.class: WrittenGames\ApplicationBundle\Security\IdentityManager
+    wg.user_provider.class: WrittenGames\ApplicationBundle\Security\UserProvider
 
 services:
-    my_user_provider:
-        class: "%my_user_provider.class%"
-        #this is the place where the properties are passed to the UserProvider - see config.yml
-        arguments: ['@fos_user.user_manager',{facebook: facebookId, google: googleId}]
+    wg.identity_manager:
+        class: %wg.identity_manager.class%
+        arguments: ['@doctrine.orm.entity_manager']
+    wg.user_provider:
+        class: %wg.user_provider.class%
+        arguments: ['@fos_user.user_manager', '@wg.identity_manager', '@event_dispatcher']
