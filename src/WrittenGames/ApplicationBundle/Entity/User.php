@@ -30,6 +30,12 @@ class User extends BaseUser
     /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
     protected $googleAccessToken;
 
+    /** @ORM\Column(type="string", length=255, name="yahoo_id", nullable=true) */
+    protected $yahooId;
+
+    /** @ORM\Column(name="yahoo_access_token", type="string", length=255, nullable=true) */
+    protected $yahooAccessToken;
+
     public function __construct()
     {
         parent::__construct();
@@ -39,7 +45,7 @@ class User extends BaseUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,14 +61,14 @@ class User extends BaseUser
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
-    
+
         return $this;
     }
 
     /**
      * Get facebookId
      *
-     * @return string 
+     * @return string
      */
     public function getFacebookId()
     {
@@ -78,14 +84,14 @@ class User extends BaseUser
     public function setFacebookAccessToken($facebookAccessToken)
     {
         $this->facebookAccessToken = $facebookAccessToken;
-    
+
         return $this;
     }
 
     /**
      * Get facebookAccessToken
      *
-     * @return string 
+     * @return string
      */
     public function getFacebookAccessToken()
     {
@@ -101,14 +107,14 @@ class User extends BaseUser
     public function setGoogleId($googleId)
     {
         $this->googleId = $googleId;
-    
+
         return $this;
     }
 
     /**
      * Get googleId
      *
-     * @return string 
+     * @return string
      */
     public function getGoogleId()
     {
@@ -124,17 +130,63 @@ class User extends BaseUser
     public function setGoogleAccessToken($googleAccessToken)
     {
         $this->googleAccessToken = $googleAccessToken;
-    
+
         return $this;
     }
 
     /**
      * Get googleAccessToken
      *
-     * @return string 
+     * @return string
      */
     public function getGoogleAccessToken()
     {
         return $this->googleAccessToken;
+    }
+
+    /**
+     * Set yahooId
+     *
+     * @param string $yahooId
+     * @return User
+     */
+    public function setYahooId($yahooId)
+    {
+        $this->yahooId = $yahooId;
+    
+        return $this;
+    }
+
+    /**
+     * Get yahooId
+     *
+     * @return string 
+     */
+    public function getYahooId()
+    {
+        return $this->yahooId;
+    }
+
+    /**
+     * Set yahooAccessToken
+     *
+     * @param string $yahooAccessToken
+     * @return User
+     */
+    public function setYahooAccessToken($yahooAccessToken)
+    {
+        $this->yahooAccessToken = $yahooAccessToken;
+    
+        return $this;
+    }
+
+    /**
+     * Get yahooAccessToken
+     *
+     * @return string 
+     */
+    public function getYahooAccessToken()
+    {
+        return $this->yahooAccessToken;
     }
 }
