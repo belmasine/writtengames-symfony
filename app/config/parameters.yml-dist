@@ -19,3 +19,6 @@ parameters:
 
     google_client_id: ~
     google_client_secret: ~
+
+    yahoo_client_id: ~
+    yahoo_client_secret: ~
