@@ -1,11 +1,18 @@
 parameters:
-    wg.identity_manager.class: WrittenGames\ApplicationBundle\Security\IdentityManager
-    wg.user_provider.class: WrittenGames\ApplicationBundle\Security\UserProvider
+    wg.security.identity_manager.class:   WrittenGames\ApplicationBundle\Security\IdentityManager
+    wg.security.user_provider.class:      WrittenGames\ApplicationBundle\Security\UserProvider
+    wg.twig.application_extension.class:  WrittenGames\ApplicationBundle\Twig\Extension\ApplicationExtension
 
 services:
-    wg.identity_manager:
-        class: %wg.identity_manager.class%
+    wg.security.identity_manager:
+        class: %wg.security.identity_manager.class%
         arguments: ['@doctrine.orm.entity_manager']
-    wg.user_provider:
-        class: %wg.user_provider.class%
-        arguments: ['@fos_user.user_manager', '@wg.identity_manager', '@event_dispatcher']
+    wg.security.user_provider:
+        class: %wg.security.user_provider.class%
+        arguments: ['@fos_user.user_manager', '@wg.security.identity_manager', '@event_dispatcher']
+    wg.twig.application_extension:
+        class: %wg.twig.application_extension.class%
+        arguments:
+            - '@service_container'
+        tags:
+            - { name: twig.extension }

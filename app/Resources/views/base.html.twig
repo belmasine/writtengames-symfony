@@ -10,86 +10,85 @@
             <!--[if IE 7]>
                 <link href="/bundles/writtengamesapplication/css/font-awesome-ie7.min.css" media="all" rel="stylesheet" type="text/css">
             <![endif]-->
+            <!--[if lt IE 9]>
+                <script src="../assets/js/html5shiv.js"></script>
+            <![endif]-->
             <link href="/bundles/writtengamesapplication/css/main.css" media="all" rel="stylesheet" type="text/css" />
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        <div id="wrap">
-            <div class="navbar navbar-fixed-top">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        {# BRAND #}
-                        <a class="brand" href="{{ path( 'home' ) }}">Written Games</a>
-                        <div class="nav-collapse collapse">
-                            {# MAIN MENU #}
-                            <ul class="nav">
-                                {% set route = 'home' %}
-                                <li{% if ( app.request.get('_route') == route ) %} class="active"{% endif %}>
-                                    <a href="{{ path( route ) }}"><i class="icon-home"></i> Home</a>
+        <div id="topnavbar" class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    {# BRAND #}
+                    <a class="brand" href="{{ path( 'home' ) }}">Written Games</a>
+                    <div class="nav-collapse collapse">
+                        {# MAIN MENU #}
+                        <ul class="nav">
+                            <li{% if ( app.request.get('_route') == 'home' ) %} class="active"{% endif %}>
+                                <a href="{{ path( 'home' ) }}"><i class="icon-home"></i> Home</a>
+                            </li>
+                        </ul>
+                        {# AUTH ACTIONS #}
+                        <ul class="nav pull-right">
+                            {% if is_granted( 'IS_AUTHENTICATED_REMEMBERED' ) %}
+                                <li{% if ( app.request.get('_route') == 'fos_user_profile_show' ) %} class="active"{% endif %}>
+                                    <a href="{{ path( 'fos_user_profile_show' ) }}"><i class="icon-user"></i> {{ app.user.username }}</a>
                                 </li>
-                                {% set route = 'fos_user_profile_show' %}
-                                <li{% if ( app.request.get('_route') == route ) %} class="active"{% endif %}>
-                                    <a href="{{ path( route ) }}"><i class="icon-user"></i> Profile</a>
+                                <li><a href="{{ path( 'fos_user_security_logout' ) }}"><i class="icon-signout"></i> Logout</a></li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="icon-cog"></i>
+                                        Settings
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path( 'fos_user_profile_edit' ) }}">Account Data</a></li>
+                                        <li><a href="{{ path( 'home' ) }}">Privacy Settings</a></li>
+                                    </ul>
                                 </li>
-                            </ul>
-                            {# AUTH ACTIONS #}
-                            <ul class="nav pull-right">
-                                {% if is_granted( 'IS_AUTHENTICATED_REMEMBERED' ) %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-cog"></i>
-                                            Settings
-                                            <b class="caret"></b>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{{ path( 'fos_user_profile_edit' ) }}">Account Data</a></li>
-                                            <li><a href="{{ path( 'home' ) }}">Privacy Settings</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="{{ path( 'fos_user_security_logout' ) }}"><i class="icon-lock"></i> Logout</a></li>
-                                {% else %}
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                            <i class="icon-unlock"></i>
-                                            Login
-                                            <b class="caret"></b>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            {% for owner in hwi_oauth_resource_owners() %}
-                                                <li>
-                                                    <a href="{{ hwi_oauth_login_url(owner) }}">Login using {{ owner|trans({}, 'HWIOAuthBundle')|capitalize }}</a>
-                                                </li>
-                                            {% endfor %}
-                                            <li class="divider"></li>
-                                            <li><a href="{{ path( 'fos_user_security_login' ) }}">Traditional login</a></li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                            {% else %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="icon-signin"></i>
+                                        Login
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% for owner in hwi_oauth_resource_owners() %}
+                                            <li>
+                                                <a href="{{ hwi_oauth_login_url(owner) }}">Login using {{ owner|trans({}, 'HWIOAuthBundle')|capitalize }}</a>
+                                            </li>
+                                        {% endfor %}
+                                        <li class="divider"></li>
+                                        <li><a href="{{ path( 'fos_user_security_login' ) }}">Traditional login</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="container">
-                {% block body %}{% endblock %}
-                <div id="push"></div>
-            </div>
+        </div>
+        <div id="wrap">
+            {% block body %}{% endblock %}
+            <div id="push"></div>
         </div>
         <div id="footer">
             <div class="container">
                 <p class="muted credit">
-                    Social Codebase with
-                    <a href="http://www.symfony.com">Symfony 2</a>,
-                    <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a>
-                    and
+                    <a href="http://www.writtengames.com">Written Games</a> social codebase
+                    with <a href="http://www.symfony.com">Symfony 2</a>,
+                    <a href="http://twitter.github.com/bootstrap">Twitter Bootstrap</a> and
                     <a href="http://fortawesome.github.com/Font-Awesome/">Font Awesome 3.0</a> icons.
-                    <a href="http://www.writtengames.com">Written Games</a> {{ 'now'|date('Y') }}.
+                    <i class="icon-github-alt"></i>
+                    Fork me on <a href="http://github.com/userfriendly/writtengames-symfony">Github</a>.
                 </p>
             </div>
         </div>

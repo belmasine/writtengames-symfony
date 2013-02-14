@@ -36,7 +36,7 @@ hwi_oauth:
         username_iterations: 30
         properties: []
     connect:
-        account_connector: wg.user_provider
+        account_connector: wg.security.user_provider
     http_client:
         timeout:       20
         verify_peer:   true
