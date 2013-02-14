@@ -30,12 +30,8 @@ security:
                     yahoo:         "/login/check-yahoo"
                 login_path:        /login
                 failure_path:      /login
-                check_path: /login_check
                 default_target_path: /profile
-
                 oauth_user_provider:
-                    #this is my custom user provider, created from FOSUBUserProvider - will manage the
-                    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
                     service: wg.user_provider
             logout:
                 path: /logout
@@ -44,7 +40,6 @@ security:
         login:
             pattern:  ^/login$
             security: false
-
             remember_me:
                 key: "%secret%"
                 lifetime: 31536000 # 365 days in seconds

@@ -25,7 +25,7 @@ class UserIdentity
     /** @ORM\Column(type="integer") */
     protected $type;
 
-    /** @ORM\ManyToOne(targetEntity="User", cascade={"persist"}) */
+    /** @ORM\ManyToOne(targetEntity="User", cascade={"persist"}, fetch="EAGER") */
     protected $user;
 
     /** @ORM\Column(type="string", length=255, nullable=true) */

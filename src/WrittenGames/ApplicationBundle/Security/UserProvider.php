@@ -53,9 +53,9 @@ class UserProvider implements OAuthAwareUserProviderInterface
                                 );
         /**
          *  tag your event listener like so:
-         *  - { name: kernel.event_listener, event: event.security.user_accounts_merged, method: onEvent }
+         *  - { name: kernel.event_listener, event: security.user_accounts_merged, method: onEvent }
          */
-        //die( 'Method connect() not implemented yet' );
+        die( 'Method connect() not implemented yet' );
         $property = $this->getProperty($response);
         $username = $response->getUsername();
 
@@ -102,9 +102,9 @@ class UserProvider implements OAuthAwareUserProviderInterface
         // Otherwise create User and Identity objects
         $responseArray = $response->getResponse();
         ////
-        $fh = fopen( __DIR__ . '/../../../../app/logs/hwi.log', 'w' );
-        fwrite( $fh, print_r( $response->getResponse(), true ));
-        fclose( $fh );
+//        $fh = fopen( __DIR__ . '/../../../../app/logs/oauth.log', 'w' );
+//        fwrite( $fh, print_r( $response->getResponse(), true ));
+//        fclose( $fh );
         ////
         $user = $this->userManager->createUser();
         $user->setUsername( $responseArray['name'] );
