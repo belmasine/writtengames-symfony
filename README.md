@@ -25,6 +25,22 @@ Clone this repository:
 
 (Adapt the repository URL if you forked it, which I would recommend)
 
+Symfony does not do the Bring Your Own Server thing, so you'll have to create a
+virtual host for it. Point the DocumentRoot to the `web` subfolder of the project
+directory.
+
+If you're using lighttpd instead of Apache, add the following to your vhost
+definition:
+
+```
+url.rewrite-if-not-file = (
+  "(.+)" => "/app.php$1"
+)
+```
+
+If you are using Apache, you don't need to worry about that as there is a `.htaccess`
+file in the `web` folder that contains the equivalent directive for Apache.
+
 Configuration
 -------------
 
@@ -39,10 +55,6 @@ Installation of dependencies
 Run Composer to pull the vendor bundles (Symfony's equivalent to Gems):
 
     composer.phar install
-
-Symfony does not do the Bring Your Own Server thing, so you'll have to create a
-virtual host for it. Point the DocumentRoot to the `web` subfolder of the project
-directory.
 
 Permissions setup
 -----------------
