@@ -25,8 +25,16 @@ Clone this repository:
 
 (Adapt the repository URL if you forked it, which I would recommend)
 
-Installation
-------------
+Configuration
+-------------
+
+Copy `app/config/parameters.yml-dist` to `app/config/parameters.yml` and fill in
+the app id and app secret values for Facebook and the other social networks.
+If you only want to use Facebook for the time being, replace the squiggly lines
+for Google and Yahoo with any string, e.g. foo and baa.
+
+Installation of dependencies
+----------------------------
 
 Run Composer to pull the vendor bundles (Symfony's equivalent to Gems):
 
@@ -35,6 +43,31 @@ Run Composer to pull the vendor bundles (Symfony's equivalent to Gems):
 Symfony does not do the Bring Your Own Server thing, so you'll have to create a
 virtual host for it. Point the DocumentRoot to the `web` subfolder of the project
 directory.
+
+Permissions setup
+-----------------
+
+Since your user account will likely not be the account which your web server is using
+you will have to set up the permissions for the `app/cache` and `app/logs` directories
+so that both users can write there. One way to do that you can find here:
+
+http://symfony.com/doc/current/book/installation.html#configuration-and-setup
+
+Follow one of the two suggested ways (`chmod +a` or `setfacl`, depending on your Linux
+distribution). You might want to run the following command in the shell first, though:
+
+    sudo rm -rf app/cache/* && sudo rm -rf app/logs/*
+
+Database
+--------
+
+Create an empty database and add the connection data for it to the settings in
+`app/config/parameters.yml`. Then run the Symfony console command for creating
+the tables:
+
+    php app/console doctrine:schema:update --force
+
+It should tell you that a number of queries have been executed.
 
 Hello World
 -----------
