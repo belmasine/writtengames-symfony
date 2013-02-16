@@ -19,12 +19,6 @@ projects regardless of their version, it's recommended to put the composer.phar
 file into a global bin dir, e.g. /usr/bin - but you can also keep it in the
 project directory (it's included in the .gitignore file for that reason).
 
-Clone this repository:
-
-    git clone git@github.com:userfriendly/writtengames-symfony.git
-
-(Adapt the repository URL if you forked it, which I would recommend)
-
 Symfony does not do the Bring Your Own Server thing, so you'll have to create a
 virtual host for it. Point the DocumentRoot to the `web` subfolder of the project
 directory.
@@ -40,6 +34,15 @@ url.rewrite-if-not-file = (
 
 If you are using Apache, you don't need to worry about that as there is a `.htaccess`
 file in the `web` folder that contains the equivalent directive for Apache.
+
+Get the code
+------------
+
+Use Git to clone this repository:
+
+    git clone git@github.com:userfriendly/writtengames-symfony.git
+
+(Adapt the repository URL if you forked it, which I would recommend)
 
 Configuration
 -------------
