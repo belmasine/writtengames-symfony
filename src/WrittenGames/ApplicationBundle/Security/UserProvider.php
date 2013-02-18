@@ -102,9 +102,9 @@ class UserProvider implements OAuthAwareUserProviderInterface
         // Otherwise create User and Identity objects
         $responseArray = $response->getResponse();
         ////
-//        $fh = fopen( __DIR__ . '/../../../../app/logs/oauth.log', 'w' );
-//        fwrite( $fh, print_r( $response->getResponse(), true ));
-//        fclose( $fh );
+        $fh = fopen( __DIR__ . '/../../../../app/logs/oauth.log', 'w' );
+        fwrite( $fh, print_r( $response->getResponse(), true ));
+        fclose( $fh );
         ////
         $user = $this->userManager->createUser();
         $user->setUsername( $responseArray['name'] );
@@ -117,6 +117,8 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $identity->setIdentifier( $identifier );
         $identity->setType( $resourceOwnerName );
         $identity->setUser( $user );
+        $identity->setName( $responseArray['name'] );
+        $identity->setEmail( $responseArray['email'] );
         $this->identityManager->updateIdentity( $identity );
         return $user;
     }

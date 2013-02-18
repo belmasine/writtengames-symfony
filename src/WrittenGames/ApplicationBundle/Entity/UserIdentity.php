@@ -14,6 +14,7 @@ class UserIdentity
     const TYPE_GOOGLE   = 1;
     const TYPE_FACEBOOK = 2;
     const TYPE_YAHOO    = 3;
+    const TYPE_TWITTER  = 4;
 
     /**
      * @ORM\Id
@@ -33,6 +34,12 @@ class UserIdentity
 
     /** @ORM\Column(type="string", length=255, nullable=true, name="access_token") */
     protected $accessToken;
+
+    /** @ORM\Column(type="string", length=255, nullable=true) */
+    protected $name;
+
+    /** @ORM\Column(type="string", length=255, nullable=true) */
+    protected $email;
 
     /**
      * Get id
@@ -134,5 +141,51 @@ class UserIdentity
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return UserIdentity
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return UserIdentity
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 }
