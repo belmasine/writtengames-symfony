@@ -15,23 +15,27 @@ hwi_oauth:
             client_id:           %facebook_client_id%
             client_secret:       %facebook_client_secret%
             scope:               "email"
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            #user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
         twitter:
             type:                twitter
             client_id:           %twitter_client_id%
             client_secret:       %twitter_client_secret%
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            #user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
         google:
             type:                google
             client_id:           %google_client_id%
             client_secret:       %google_client_secret%
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            #user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
         yahoo:
             type:                yahoo
             client_id:           %yahoo_client_id%
             client_secret:       %yahoo_client_secret%
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            #user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
                 nickname:   username

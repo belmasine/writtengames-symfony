@@ -123,10 +123,10 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $user->setEnabled( true );
         $this->userManager->updateUser( $user );
         $identity = $this->identityManager->createIdentity();
-        echo "<pre>";
-        print_r( $response->getAccessToken() );
-        echo "</pre>";
-        die(); exit;
+//        echo "<pre>";
+//        print_r( $response->getAccessToken() );
+//        echo "</pre>";
+//        die(); exit;
         $identity->setAccessToken( $response->getAccessToken() );
         $identity->setIdentifier( $identifier );
         $identity->setType( $resourceOwnerName );
