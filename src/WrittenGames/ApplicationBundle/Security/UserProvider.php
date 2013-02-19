@@ -101,26 +101,60 @@ class UserProvider implements OAuthAwareUserProviderInterface
         }
         // Otherwise create User and Identity objects
         $responseArray = $response->getResponse();
+        #echo '<pre>' . print_r( $responseArray, true ) . '</pre>'; die(); exit;
         ////
         $fh = fopen( __DIR__ . '/../../../../app/logs/oauth.log', 'w' );
-        fwrite( $fh, print_r( $response->getResponse(), true ));
+        fwrite( $fh, print_r( $responseArray, true ));
         fclose( $fh );
         ////
         $user = $this->userManager->createUser();
-        $user->setUsername( $responseArray['name'] );
-        $user->setEmail( $responseArray['email'] );
+        $username = $this->makeUniqueUsername(
+                        array_key_exists( 'name', $responseArray )
+                            ? $responseArray['name']
+                            : $identifier
+                    );
+        $user->setUsername( $username );
+        if ( array_key_exists( 'email', $responseArray ))
+        {
+            $user->setEmail( $responseArray['email'] );
+        }
+        else $user->setEmail( 'not set' );
         $user->setPassword( 'not set' );
         $user->setEnabled( true );
         $this->userManager->updateUser( $user );
         $identity = $this->identityManager->createIdentity();
+        echo "<pre>";
+        print_r( $response->getAccessToken() );
+        echo "</pre>";
+        die(); exit;
         $identity->setAccessToken( $response->getAccessToken() );
         $identity->setIdentifier( $identifier );
         $identity->setType( $resourceOwnerName );
         $identity->setUser( $user );
-        $identity->setName( $responseArray['name'] );
-        $identity->setEmail( $responseArray['email'] );
+//        if ( array_key_exists( 'name', $responseArray ))
+//        {
+//            $identity->setName( $responseArray['name'] );
+//        }
+//        if ( array_key_exists( 'email', $responseArray ))
+//        {
+//            $identity->setEmail( $responseArray['email'] );
+//        }
         $this->identityManager->updateIdentity( $identity );
         return $user;
+    }
+
+    protected function makeUniqueUsername( $username )
+    {
+        $originalName = $username;
+        $existingUser = $this->userManager->findUserByUsername( $username );
+        $suffix = 0;
+        while ( $existingUser )
+        {
+            $suffix++;
+            $username = $originalName . $suffix;
+            $existingUser = $this->userManager->findUserByUsername( $username );
+        }
+        return $username;
     }
 
 }

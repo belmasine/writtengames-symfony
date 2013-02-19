@@ -54,8 +54,9 @@ class IdentityManager
     {
         switch ( $name )
         {
-            case 'google': return UserIdentity::TYPE_GOOGLE;
             case 'facebook': return UserIdentity::TYPE_FACEBOOK;
+            case 'twitter': return UserIdentity::TYPE_TWITTER;
+            case 'google': return UserIdentity::TYPE_GOOGLE;
             case 'yahoo': return UserIdentity::TYPE_YAHOO;
         }
     }

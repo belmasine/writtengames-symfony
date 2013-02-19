@@ -26,6 +26,7 @@ security:
             oauth:
                 resource_owners:
                     facebook:      "/login/check-facebook"
+                    twitter:       "/login/check-twitter"
                     google:        "/login/check-google"
                     yahoo:         "/login/check-yahoo"
                 login_path:        /login
