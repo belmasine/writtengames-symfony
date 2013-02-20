@@ -87,6 +87,12 @@ class UserProvider implements OAuthAwareUserProviderInterface
     {
         // try to retrieve Identity object for response
         $resourceOwnerName = $response->getResourceOwner()->getName();
+        $accessToken = $response->getAccessToken();
+        if ( 'twitter' == $resourceOwnerName )
+        {
+            $accessToken = $accessToken['oauth_token'];
+            //echo "<pre>" . print_r( $accessToken, true ) . "</pre>"; die(); exit;
+        }
         $identifier = $response->getUsername();
         $criteria = array(
             'identifier' => $identifier,
@@ -95,7 +101,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $existingIdentity = $this->identityManager->findIdentityBy( $criteria );
         if ( $existingIdentity )
         {
-            $existingIdentity->setAccessToken( $response->getAccessToken() );
+            $existingIdentity->setAccessToken( $accessToken );
             // return User object for Identity
             return $existingIdentity->getUser();
         }
@@ -108,7 +114,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
         fclose( $fh );
         ////
         $user = $this->userManager->createUser();
-        $username = $this->makeUniqueUsername(
+        $username = $this->createUniqueUsername(
                         array_key_exists( 'name', $responseArray )
                             ? $responseArray['name']
                             : $identifier
@@ -118,32 +124,28 @@ class UserProvider implements OAuthAwareUserProviderInterface
         {
             $user->setEmail( $responseArray['email'] );
         }
-        else $user->setEmail( 'not set' );
+        else $user->setEmail( $this->createUniquePlaceholder() );
         $user->setPassword( 'not set' );
         $user->setEnabled( true );
         $this->userManager->updateUser( $user );
         $identity = $this->identityManager->createIdentity();
-//        echo "<pre>";
-//        print_r( $response->getAccessToken() );
-//        echo "</pre>";
-//        die(); exit;
-        $identity->setAccessToken( $response->getAccessToken() );
+        $identity->setAccessToken( $accessToken );
         $identity->setIdentifier( $identifier );
         $identity->setType( $resourceOwnerName );
         $identity->setUser( $user );
-//        if ( array_key_exists( 'name', $responseArray ))
-//        {
-//            $identity->setName( $responseArray['name'] );
-//        }
-//        if ( array_key_exists( 'email', $responseArray ))
-//        {
-//            $identity->setEmail( $responseArray['email'] );
-//        }
+        if ( array_key_exists( 'name', $responseArray ))
+        {
+            $identity->setName( $responseArray['name'] );
+        }
+        if ( array_key_exists( 'email', $responseArray ))
+        {
+            $identity->setEmail( $responseArray['email'] );
+        }
         $this->identityManager->updateIdentity( $identity );
         return $user;
     }
 
-    protected function makeUniqueUsername( $username )
+    protected function createUniqueUsername( $username )
     {
         $originalName = $username;
         $existingUser = $this->userManager->findUserByUsername( $username );
@@ -155,6 +157,11 @@ class UserProvider implements OAuthAwareUserProviderInterface
             $existingUser = $this->userManager->findUserByUsername( $username );
         }
         return $username;
+    }
+
+    protected function createUniquePlaceholder()
+    {
+        return 'notset' . md5( time() );
     }
 
 }
