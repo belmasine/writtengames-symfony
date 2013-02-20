@@ -2,6 +2,7 @@
 
 namespace WrittenGames\ApplicationBundle\Security;
 
+use WrittenGames\ApplicationBundle\Entity\User;
 use WrittenGames\ApplicationBundle\Security\IdentityManager;
 use WrittenGames\ApplicationBundle\Event\UserAccountMergedEvent;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -29,8 +30,9 @@ class UserProvider implements OAuthAwareUserProviderInterface
     /**
      * Constructor.
      *
-     * @param UserManagerInterface $userManager FOSUB user provider.
-     * @param IdentityManager      $identityManager  Identity manager
+     * @param UserManagerInterface          $userManager        FOSUB User manager
+     * @param IdentityManager               $identityManager    Identity manager
+     * @param ContainerAwareEventDispatcher $eventDispatcher    Event dispatcher
      */
     public function __construct( UserManagerInterface $userManager, IdentityManager $identityManager, ContainerAwareEventDispatcher $eventDispatcher )
     {
@@ -85,64 +87,12 @@ class UserProvider implements OAuthAwareUserProviderInterface
      */
     public function loadUserByOAuthUserResponse( UserResponseInterface $response )
     {
-        // try to retrieve Identity object for response
-        $resourceOwnerName = $response->getResourceOwner()->getName();
-        $accessToken = $response->getAccessToken();
-        if ( 'twitter' == $resourceOwnerName )
-        {
-            $accessToken = $accessToken['oauth_token'];
-            //echo "<pre>" . print_r( $accessToken, true ) . "</pre>"; die(); exit;
-        }
-        $identifier = $response->getUsername();
-        $criteria = array(
-            'identifier' => $identifier,
-            'type' => $resourceOwnerName,
-        );
-        $existingIdentity = $this->identityManager->findIdentityBy( $criteria );
+        $existingIdentity = $this->getExistingIdentity( $response );
         if ( $existingIdentity )
         {
-            $existingIdentity->setAccessToken( $accessToken );
-            // return User object for Identity
             return $existingIdentity->getUser();
         }
-        // Otherwise create User and Identity objects
-        $responseArray = $response->getResponse();
-        #echo '<pre>' . print_r( $responseArray, true ) . '</pre>'; die(); exit;
-        ////
-        $fh = fopen( __DIR__ . '/../../../../app/logs/oauth.log', 'w' );
-        fwrite( $fh, print_r( $responseArray, true ));
-        fclose( $fh );
-        ////
-        $user = $this->userManager->createUser();
-        $username = $this->createUniqueUsername(
-                        array_key_exists( 'name', $responseArray )
-                            ? $responseArray['name']
-                            : $identifier
-                    );
-        $user->setUsername( $username );
-        if ( array_key_exists( 'email', $responseArray ))
-        {
-            $user->setEmail( $responseArray['email'] );
-        }
-        else $user->setEmail( $this->createUniquePlaceholder() );
-        $user->setPassword( 'not set' );
-        $user->setEnabled( true );
-        $this->userManager->updateUser( $user );
-        $identity = $this->identityManager->createIdentity();
-        $identity->setAccessToken( $accessToken );
-        $identity->setIdentifier( $identifier );
-        $identity->setType( $resourceOwnerName );
-        $identity->setUser( $user );
-        if ( array_key_exists( 'name', $responseArray ))
-        {
-            $identity->setName( $responseArray['name'] );
-        }
-        if ( array_key_exists( 'email', $responseArray ))
-        {
-            $identity->setEmail( $responseArray['email'] );
-        }
-        $this->identityManager->updateIdentity( $identity );
-        return $user;
+        return $this->createUser( $response );
     }
 
     protected function createUniqueUsername( $username )
@@ -162,6 +112,73 @@ class UserProvider implements OAuthAwareUserProviderInterface
     protected function createUniquePlaceholder()
     {
         return 'notset' . md5( time() );
+    }
+
+    protected function getAccessToken( UserResponseInterface $response )
+    {
+        $resourceOwnerName = $response->getResourceOwner()->getName();
+        $accessToken = $response->getAccessToken();
+        if ( 'twitter' == $resourceOwnerName )
+        {
+            return $accessToken['oauth_token'];
+        }
+        return $accessToken;
+    }
+
+    protected function getExistingIdentity( UserResponseInterface $response )
+    {
+        $criteria = array(
+            'identifier' => $response->getUsername(),
+            'type' => $response->getResourceOwner()->getName(),
+        );
+        $existingIdentity = $this->identityManager->findIdentityBy( $criteria );
+        if ( $existingIdentity )
+        {
+            $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
+        }
+        return $existingIdentity;
+    }
+
+    protected function createUser( UserResponseInterface $response )
+    {
+        $responseArray = $response->getResponse();
+        $user = $this->userManager->createUser();
+        $username = $this->createUniqueUsername(
+                        array_key_exists( 'name', $responseArray )
+                            ? $responseArray['name']
+                            : $response->getUsername()
+                    );
+        $user->setUsername( $username );
+        if ( array_key_exists( 'email', $responseArray ))
+        {
+            $user->setEmail( $responseArray['email'] );
+        }
+        else $user->setEmail( $this->createUniquePlaceholder() );
+        $user->setPassword( 'not set' );
+        $user->setEnabled( true );
+        $this->userManager->updateUser( $user );
+        $this->createIdentity( $response, $user );
+        return $user;
+    }
+
+    protected function createIdentity( UserResponseInterface $response, User $user )
+    {
+        $responseArray = $response->getResponse();
+        $identity = $this->identityManager->createIdentity();
+        $identity->setAccessToken( $this->getAccessToken( $response ));
+        $identity->setIdentifier( $response->getUsername() );
+        $identity->setType( $response->getResourceOwner()->getName() );
+        $identity->setUser( $user );
+        if ( array_key_exists( 'name', $responseArray ))
+        {
+            $identity->setName( $responseArray['name'] );
+        }
+        if ( array_key_exists( 'email', $responseArray ))
+        {
+            $identity->setEmail( $responseArray['email'] );
+        }
+        $this->identityManager->updateIdentity( $identity );
+        return $identity;
     }
 
 }

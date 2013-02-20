@@ -22,14 +22,14 @@ class ApplicationExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'foo' => new Twig_Function_Method( $this, 'foo', array(
-                'is_safe' => array( 'html' ),
-            )),
+            //'foo' => new Twig_Function_Method( $this, 'foo', array( 'is_safe' => array( 'html' ))),
+            'show_email' => new Twig_Function_Method( $this, 'showEmail' ),
         );
     }
 
-    public function foo()
+    public function showEmail( $email )
     {
-        return '<i>Foo</i>';
+        if ( false !== strpos( $email, 'notset' )) return '';
+        return $email;
     }
 }
