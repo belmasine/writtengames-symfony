@@ -23,12 +23,15 @@
     </div>
     <div class="span6">
         <div class="pull-right">
-            <h3>Connect another social login</h3>
+            {% set foo = identities|length > 0 ? 'another' : 'a' %}
+            <h3>Connect {{ foo }} social login</h3>
         </div>
     </div>
 </div>
 
-<h3>Add an email address</h3>
+{% set foo = app.user.email ? 'Change your' : 'Add an' %}
+<h3>{{ foo }} email address</h3>
 
+{% set foo = app.user.password ? 'Change your' : 'Add a' %}
 <h3>Add a password</h3>
 

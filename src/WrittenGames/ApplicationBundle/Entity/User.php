@@ -13,20 +13,20 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends BaseUser
 {
     /**
-     * The purpose of a unique placeholder element is use in a column
-     * like `email` which is mapped as `unique` and thus cannot be set
-     * to NULL. Since this application implements both traditional and
-     * social login, users must have the choice to not provide an email
+     * The purpose of a unique placeholder element is use in a column like
+     * `emailCanonical` which is mapped as `unique` and thus cannot be set
+     * to NULL. Since this application implements both a traditional and a
+     * social login, the users must have the choice to not provide an email
      * address.
      *
-     * By means of overriding the getter and setter for the `email`
-     * property, this is handled transparently by the entity class.
+     * By means of overriding the setter for the `emailCanonical` property,
+     * this is handled transparently by the entity class.
      */
-    const UNIQUE_PLACEHOLDER_PREFIX = 'notset';
+    const UNIQUE_PLACEHOLDER_SUFFIX = '@not.set';
 
     protected function createUniquePlaceholder()
     {
-        return self::UNIQUE_PLACEHOLDER_PREFIX . md5( time() . rand( 0, 99999 ));
+        return md5( time() . rand( 0, 99999 )) . self::UNIQUE_PLACEHOLDER_SUFFIX;
     }
 
     /**
@@ -43,7 +43,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->email = $this->createUniquePlaceholder();
-        $this->emailCanonical = $this->email;
+        $this->setEmailCanonical( $this->email );
     }
 
     /**
@@ -56,24 +56,10 @@ class User extends BaseUser
         return $this->id;
     }
 
-    public function getEmail()
+    public function setEmailCanonical( $emailCanonical )
     {
-        $email = parent::getEmail();
-        if ( false !== strpos( $email, self::UNIQUE_PLACEHOLDER_PREFIX ))
-        {
-            return NULL;
-        }
-        return $email;
-    }
-
-    public function setEmail( $email )
-    {
-        if ( NULL === $email || '' === $email )
-        {
-            $email = $this->createUniquePlaceholder();
-            $this->emailCanonical = $email;
-        }
-        parent::setEmail( $email );
+        $emailCanonical = $emailCanonical ?: $this->createUniquePlaceholder();
+        parent::setEmailCanonical( $emailCanonical );
     }
 
     /**
