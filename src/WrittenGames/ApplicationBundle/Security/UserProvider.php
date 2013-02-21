@@ -120,9 +120,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
     {
         $user = $this->userManager->createUser();
         $user->setUsername( $this->createUniqueUsername( $this->getRealName( $response )));
-        $email = $this->getEmail( $response );
-        $user->setEmail( $email );
-        if ( !$email ) $user->setEmailCanonical( NULL );
+        $user->setEmail( $this->getEmail( $response ) );
         $user->setPassword( '' );
         $user->setEnabled( true );
         $this->userManager->updateUser( $user );

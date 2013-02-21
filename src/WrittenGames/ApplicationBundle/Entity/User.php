@@ -16,11 +16,11 @@ class User extends BaseUser
      * The purpose of a unique placeholder element is use in a column like
      * `emailCanonical` which is mapped as `unique` and thus cannot be set
      * to NULL. Since this application implements both a traditional and a
-     * social login, the users must have the choice to not provide an email
+     * social login, the user must have the choice to not provide an email
      * address.
      *
-     * By means of overriding the setter for the `emailCanonical` property,
-     * this is handled transparently by the entity class.
+     * By means of overriding the setters for both the `emailCanonical` and
+     * `email` properties, this is handled transparently by the entity class.
      */
     const UNIQUE_PLACEHOLDER_SUFFIX = '@not.set';
 
@@ -56,6 +56,18 @@ class User extends BaseUser
         return $this->id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function setEmail($email)
+    {
+        if ( !$email ) $this->setEmailCanonical( NULL );
+        parent::setEmail($email);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setEmailCanonical( $emailCanonical )
     {
         $emailCanonical = $emailCanonical ?: $this->createUniquePlaceholder();
