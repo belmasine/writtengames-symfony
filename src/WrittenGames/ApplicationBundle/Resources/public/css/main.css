@@ -159,8 +159,11 @@ code {
 
 span.form-control-hint {
     position: absolute;
-    margin-left: 12px;
-    margin-top: 6px;
+    margin-left: 6px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #fff;
+    background-color: rgba( 234, 234, 234, 0.5 );
 }
 
 span.form-control-hint i.icon {
@@ -173,6 +176,11 @@ span.form-control-hint.success {
 
 span.form-control-hint.error {
     color: lightcoral;
+}
+
+span.form-control-hint.info,
+span.form-control-hint.loading {
+    color: #3a87ad;
 }
 
 .container.profile {

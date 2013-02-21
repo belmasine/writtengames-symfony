@@ -35,7 +35,7 @@
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
                         <input name="username" value="{{ user.username }}"
-                               type="text" class="input-xlarge" id="input_username"
+                               type="text" class="input input-xlarge" id="input_username"
                                data-availability-check-url="{{ checkPath }}" />
                         <input type="submit" class="btn" value="save" />
                     </div>
@@ -61,7 +61,7 @@
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
                         <input name="email" value="{{ user.email }}"
-                               type="text" class="input-xlarge" />
+                               type="text" class="input input-xlarge" id="input_email" />
                         <input type="submit" class="btn" value="save" />
                     </div>
                 </div>
@@ -90,6 +90,11 @@
         $( function()
         {
             $( '.form-control-hint' ).show();
+            $( '#input_email' ).keyup( function()
+            {
+                var target = $( this ).parent();
+                addFormControlHint( {cssClass: 'info', text: 'Changing your email address will require confirmation.'}, target );
+            });
             $( '#input_username' ).keyup( function()
             {
                 if ( usernameAvailabilityQueried && usernameAvailabilityQueried.readyState != 4 )
@@ -111,9 +116,9 @@
                     }
                 });
             });
-            $( '#input_username' ).blur( function()
+            $( '.input' ).blur( function()
             {
-            $( '.form-control-hint' ).fadeOut( 3000 );
+                $( '.form-control-hint' ).fadeOut( 3000 );
             });
         });
         function addFormControlHint( response, target )
@@ -133,6 +138,9 @@
             {
                 case 'loading':
                     icon.addClass( 'icon-spinner icon-spin' );
+                    break;
+                case 'info':
+                    icon.addClass( 'icon-info-sign' );
                     break;
                 case 'success':
                     icon.addClass( 'icon-ok-sign' );
