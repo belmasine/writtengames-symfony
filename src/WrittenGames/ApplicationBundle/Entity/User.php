@@ -7,16 +7,16 @@ use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="WrittenGames\ApplicationBundle\Entity\Repository\UserRepository")
  * @ORM\Table(name="user__user")
  */
 class User extends BaseUser
 {
     /**
-     * The purpose of a unique placeholder element is use in a column like
-     * `emailCanonical` which is mapped as `unique` and thus cannot be set
-     * to NULL. Since this application implements both a traditional and a
-     * social login, the user must have the choice to not provide an email
+     * The purpose of this unique placeholder element is its use in a column
+     * like `emailCanonical` which is mapped as `unique` and thus cannot be
+     * set to NULL. Since this application implements both a traditional and
+     * a social login, the user must have the choice to not provide an email
      * address.
      *
      * By means of overriding the setters for both the `emailCanonical` and

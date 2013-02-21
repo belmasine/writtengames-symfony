@@ -1,5 +1,7 @@
-/* Sticky footer styles
--------------------------------------------------- */
+
+/*'''''''''''''''*\
+|   SITE LAYOUT   |
+\*_______________*/
 
 html,
 body {
@@ -24,7 +26,6 @@ body {
 #footer {
   background-color: #f5f5f5;
 }
-
 
 /* CUSTOMIZE THE CAROUSEL
 -------------------------------------------------- */
@@ -78,8 +79,6 @@ body {
   margin-top: 10px;
 }
 
-
-
 /* RESPONSIVE CSS
 -------------------------------------------------- */
 
@@ -89,7 +88,6 @@ body {
     height: 500px;
   }
 }
-
 
 @media (max-width: 767px) {
   .carousel {
@@ -153,4 +151,22 @@ code {
   -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
      -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
           box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+
+/*''''''''''''''''''*\
+|   ELEMENT STYLES   |
+\*__________________*/
+
+span.form-control-hint {
+    position: absolute;
+    margin-left: 12px;
+    margin-top: 6px;
+}
+
+span.form-control-hint.success {
+    color: lightseagreen;
+}
+
+span.form-control-hint.error {
+    color: lightcoral;
 }

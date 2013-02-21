@@ -1,15 +1,24 @@
 parameters:
+
     wg.security.identity_manager.class:   WrittenGames\ApplicationBundle\Security\IdentityManager
     wg.security.user_provider.class:      WrittenGames\ApplicationBundle\Security\UserProvider
+    wg.util.canonicaliser.class:          WrittenGames\ApplicationBundle\Util\Canonicaliser
     wg.twig.application_extension.class:  WrittenGames\ApplicationBundle\Twig\Extension\ApplicationExtension
 
 services:
+
     wg.security.identity_manager:
         class: %wg.security.identity_manager.class%
         arguments: ['@doctrine.orm.entity_manager']
+
     wg.security.user_provider:
         class: %wg.security.user_provider.class%
         arguments: ['@fos_user.user_manager', '@wg.security.identity_manager', '@event_dispatcher']
+
+    wg.util.canonicaliser:
+        class: %wg.util.canonicaliser.class%
+        public: false
+
     wg.twig.application_extension:
         class: %wg.twig.application_extension.class%
         arguments:

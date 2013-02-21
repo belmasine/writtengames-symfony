@@ -1,0 +1,24 @@
+
+wg_profile_show:
+    pattern:  /{canonical_username}
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:show }
+
+wg_profile_edit:
+    pattern:  /{canonical_username}/edit
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:edit }
+
+wg_profile_username_available:
+    pattern:  /{canonical_username}/username-available
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:usernameAvailable }
+
+wg_profile_save_username:
+    pattern:  /{canonical_username}/change-username
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:saveUsername }
+
+wg_profile_save_email:
+    pattern:  /{canonical_username}/change-email
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:saveEmail }
+
+wg_profile_save_password:
+    pattern:  /{canonical_username}/change-password
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:savePassword }

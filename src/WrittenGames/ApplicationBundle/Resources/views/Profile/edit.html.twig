@@ -1,0 +1,96 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+
+        {# PAGE HEADER #}
+        <div class="page-header">
+            <h1>Your account settings</h1>
+        </div>
+
+        {# ACCOUNT SETTINGS INFORMATION #}
+        <div class="well well-small">
+            Change your user name or email address,
+            connect a social login to your account,
+            or enable traditional login with a password.
+        </div>
+
+        {# USERNAME FORM #}
+        <form method="POST"
+              action="{{ path( 'wg_profile_save_username', { 'canonical_username': user.usernameCanonical } ) }}">
+
+            {# FORM HEADER #}
+            <div class="row">
+                <div class="span12">
+                    <h3 class="text-center">Your user name <small>as it appears on this website</small></h3>
+                </div>
+            </div>
+
+            {# FORM ELEMENTS #}
+            <div class="row text-center">
+                <div class="span12" style="position: relative;">
+                    <div class="input-append">
+                        <input name="username" value="{{ user.username }}"
+                               type="text" class="input-xlarge" id="input_username" />
+                        <input type="submit" class="btn" value="save" />
+                    </div>
+                    <span class="form-control-hint success">
+                        foo
+                    </span>
+                </div>
+            </div>
+
+        </form>
+
+        {# EMAIL FORM #}
+        {% set foo = user.email ? 'Change your' : 'Add an' %}
+        <form method="POST"
+              action="{{ path( 'wg_profile_save_email', { 'canonical_username': user.usernameCanonical } ) }}">
+
+            {# FORM HEADER #}
+            <div class="row">
+                <div class="span12">
+                    <h3 class="text-center">{{ foo }} email address</h3>
+                </div>
+            </div>
+
+            {# FORM ELEMENTS #}
+            <div class="row text-center">
+                <div class="span12" style="position: relative;">
+                    <div class="input-append">
+                        <input name="email" value="{{ user.email }}"
+                               type="text" class="input-xlarge" />
+                        <input type="submit" class="btn" value="save" />
+                    </div>
+                    <span class="form-control-hint success">
+                        foo
+                    </span>
+                </div>
+            </div>
+
+        </form>
+
+        {% set foo = user.password ? 'Change your' : 'Add a' %}
+        <h3 class="text-center">Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+
+        {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
+        <h3 class="text-center">Connect {{ foo }} social login</h3>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $( function()
+        {
+            $( '#input_username' ).keyup( function()
+            {
+                //console.log( $( this ).val() );
+                // TODO: AJAX call to username-available action
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,9 +1,8 @@
 
-WrittenGamesApplicationBundle:
-    resource: "@WrittenGamesApplicationBundle/Resources/config/routing.yml"
-    prefix:   /
+########################
+# FosUserBundle Routes #
+########################
 
-#FosUserBundle Routes
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -23,7 +22,10 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
 
-#HWIOAuthBundle routes
+#########################
+# HWIOAuthBundle routes #
+#########################
+
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
     prefix: /login
@@ -47,3 +49,15 @@ google_login:
 
 yahoo_login:
     pattern: /login/check-yahoo
+
+############################
+# ApplicationBundle routes #
+############################
+
+wg_default:
+    resource: "@WrittenGamesApplicationBundle/Resources/config/routing/default.yml"
+    prefix:   /
+
+wg_profile:
+    resource: "@WrittenGamesApplicationBundle/Resources/config/routing/profile.yml"
+    prefix:   /

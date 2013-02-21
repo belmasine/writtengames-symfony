@@ -83,6 +83,12 @@ class UserIdentity
         return self::getReadableType( $this->type );
     }
 
+    /**
+     * Convert type to human-readable form
+     *
+     * @param integer $type
+     * @return string
+     */
     static public function getReadableType( $type )
     {
         switch ( $type )
@@ -94,6 +100,12 @@ class UserIdentity
         }
     }
 
+    /**
+     * Convert human-readable type to integer
+     *
+     * @param string $type
+     * @return integer
+     */
     static public function getStorableType( $type )
     {
         switch ( $type )

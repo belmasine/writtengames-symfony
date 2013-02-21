@@ -22,7 +22,7 @@ security:
                 csrf_provider: form.csrf_provider
                 login_path: /login
                 check_path: /login_check
-                default_target_path: /profile
+                default_target_path: /
             oauth:
                 resource_owners:
                     facebook:      "/login/check-facebook"
@@ -31,7 +31,7 @@ security:
                     yahoo:         "/login/check-yahoo"
                 login_path:        /login
                 failure_path:      /login
-                default_target_path: /profile
+                default_target_path: /
                 oauth_user_provider:
                     service: wg.security.user_provider
             logout:
@@ -52,3 +52,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, roles: ROLE_SUPER_ADMIN }
+        # TODO: add regex for catching only ^/<username>/edit
+        - { path: /edit, roles: ROLE_USER }

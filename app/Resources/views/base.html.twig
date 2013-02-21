@@ -27,19 +27,19 @@
                         <span class="icon-bar"></span>
                     </button>
                     {# BRAND #}
-                    <a class="brand" href="{{ path( 'home' ) }}">Written Games</a>
+                    <a class="brand" href="{{ path( 'wg_home' ) }}">Written Games</a>
                     <div class="nav-collapse collapse">
                         {# MAIN MENU #}
                         <ul class="nav">
-                            <li{% if ( app.request.get('_route') == 'home' ) %} class="active"{% endif %}>
-                                <a href="{{ path( 'home' ) }}"><i class="icon-home"></i> Home</a>
+                            <li{% if ( app.request.get('_route') == 'wg_home' ) %} class="active"{% endif %}>
+                                <a href="{{ path( 'wg_home' ) }}"><i class="icon-home"></i> Home</a>
                             </li>
                         </ul>
                         {# AUTH ACTIONS #}
                         <ul class="nav pull-right">
                             {% if is_granted( 'IS_AUTHENTICATED_REMEMBERED' ) %}
-                                <li{% if ( app.request.get('_route') == 'fos_user_profile_show' ) %} class="active"{% endif %}>
-                                    <a href="{{ path( 'fos_user_profile_show' ) }}"><i class="icon-user"></i> {{ app.user.username }}</a>
+                                <li{% if ( app.request.get('_route') == 'wg_profile_show' ) %} class="active"{% endif %}>
+                                    <a href="{{ path( 'wg_profile_show', { 'canonical_username': app.user.usernameCanonical } ) }}"><i class="icon-user"></i> {{ app.user.username }}</a>
                                 </li>
                                 <li><a href="{{ path( 'fos_user_security_logout' ) }}"><i class="icon-signout"></i> Logout</a></li>
                                 <li class="dropdown">
@@ -49,8 +49,8 @@
                                         <b class="caret"></b>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{ path( 'fos_user_profile_edit' ) }}">Account Settings</a></li>
-                                        <li><a href="{{ path( 'home' ) }}">Privacy Settings</a></li>
+                                        <li><a href="{{ path( 'wg_profile_edit', { 'canonical_username': app.user.usernameCanonical } ) }}">Account Settings</a></li>
+                                        <li><a href="{{ path( 'wg_home' ) }}">Privacy Settings</a></li>
                                     </ul>
                                 </li>
                             {% else %}
