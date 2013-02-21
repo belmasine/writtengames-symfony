@@ -23,13 +23,10 @@ class ApplicationExtension extends Twig_Extension
     {
         return array(
             //'foo' => new Twig_Function_Method( $this, 'foo', array( 'is_safe' => array( 'html' ))),
-            'show_email' => new Twig_Function_Method( $this, 'showEmail' ),
         );
     }
 
-    public function showEmail( $email )
+    public function getNonConnectedSocialNetworks( $identities = array() )
     {
-        if ( false !== strpos( $email, 'notset' )) return '';
-        return $email;
     }
 }

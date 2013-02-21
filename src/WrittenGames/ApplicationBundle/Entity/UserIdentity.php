@@ -26,7 +26,7 @@ class UserIdentity
     /** @ORM\Column(type="integer") */
     protected $type;
 
-    /** @ORM\ManyToOne(targetEntity="User", cascade={"persist"}, fetch="EAGER") */
+    /** @ORM\ManyToOne(targetEntity="User", cascade={"persist"}, fetch="EAGER", inversedBy="identities") */
     protected $user;
 
     /** @ORM\Column(type="string", length=255, nullable=true) */
@@ -57,10 +57,9 @@ class UserIdentity
      * @param integer $type
      * @return UserIdentity
      */
-    public function setType($type)
+    public function setType( $type )
     {
-        $this->type = $type;
-
+        $this->type = is_int( $type ) ? $type : self::getStorableType( $type );
         return $this;
     }
 
@@ -75,12 +74,44 @@ class UserIdentity
     }
 
     /**
+     * Get type in human-readable form
+     *
+     * @return string
+     */
+    public function getTypeString()
+    {
+        return self::getReadableType( $this->type );
+    }
+
+    static public function getReadableType( $type )
+    {
+        switch ( $type )
+        {
+            case self::TYPE_GOOGLE:     return 'google';
+            case self::TYPE_FACEBOOK:   return 'facebook';
+            case self::TYPE_YAHOO:      return 'yahoo';
+            case self::TYPE_TWITTER:    return 'twitter';
+        }
+    }
+
+    static public function getStorableType( $type )
+    {
+        switch ( $type )
+        {
+            case 'google':      return self::TYPE_GOOGLE;
+            case 'facebook':    return self::TYPE_FACEBOOK;
+            case 'yahoo':       return self::TYPE_YAHOO;
+            case 'twitter':     return self::TYPE_TWITTER;
+        }
+    }
+
+    /**
      * Set identifier
      *
      * @param string $identifier
      * @return UserIdentity
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier( $identifier )
     {
         $this->identifier = $identifier;
 
@@ -103,7 +134,7 @@ class UserIdentity
      * @param string $accessToken
      * @return UserIdentity
      */
-    public function setAccessToken($accessToken)
+    public function setAccessToken( $accessToken )
     {
         $this->accessToken = $accessToken;
 
@@ -126,7 +157,7 @@ class UserIdentity
      * @param \WrittenGames\ApplicationBundle\Entity\User $user
      * @return UserIdentity
      */
-    public function setUser(User $user = null)
+    public function setUser( User $user = null )
     {
         $this->user = $user;
 
@@ -149,17 +180,17 @@ class UserIdentity
      * @param string $name
      * @return UserIdentity
      */
-    public function setName($name)
+    public function setName( $name )
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -172,17 +203,17 @@ class UserIdentity
      * @param string $email
      * @return UserIdentity
      */
-    public function setEmail($email)
+    public function setEmail( $email )
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
