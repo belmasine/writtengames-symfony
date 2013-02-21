@@ -174,3 +174,12 @@ span.form-control-hint.success {
 span.form-control-hint.error {
     color: lightcoral;
 }
+
+/*'''''''''''''''''''''''''''''''''*\
+|   TEMPORARY BOOTSTRAP OVERRIDES   |
+\*_________________________________*/
+
+.well {
+    font-size: 9pt;
+    color: #999;
+}
