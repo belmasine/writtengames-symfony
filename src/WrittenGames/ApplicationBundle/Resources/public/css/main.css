@@ -163,6 +163,10 @@ span.form-control-hint {
     margin-top: 6px;
 }
 
+span.form-control-hint i.icon {
+    margin-right: 5px;
+}
+
 span.form-control-hint.success {
     color: lightseagreen;
 }

@@ -28,16 +28,15 @@
             </div>
 
             {# FORM ELEMENTS #}
+            {% set checkPath = path( 'wg_profile_username_available', { 'canonical_username': user.usernameCanonical } ) %}
             <div class="row text-center">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
                         <input name="username" value="{{ user.username }}"
-                               type="text" class="input-xlarge" id="input_username" />
+                               type="text" class="input-xlarge" id="input_username"
+                               data-availability-check-url="{{ checkPath }}" />
                         <input type="submit" class="btn" value="save" />
                     </div>
-                    <span class="form-control-hint success">
-                        foo
-                    </span>
                 </div>
             </div>
 
@@ -63,9 +62,6 @@
                                type="text" class="input-xlarge" />
                         <input type="submit" class="btn" value="save" />
                     </div>
-                    <span class="form-control-hint success">
-                        foo
-                    </span>
                 </div>
             </div>
 
@@ -84,13 +80,58 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
+        var usernameAvailabilityQueried;
         $( function()
         {
+            $( '.form-control-hint' ).show();
             $( '#input_username' ).keyup( function()
             {
-                //console.log( $( this ).val() );
-                // TODO: AJAX call to username-available action
+                if ( usernameAvailabilityQueried && usernameAvailabilityQueried.readyState != 4 )
+                {
+                    usernameAvailabilityQueried.abort();
+                }
+                var url = $( this ).attr( 'data-availability-check-url' );
+                var username = $( this ).val();
+                var target = $( this ).parent();
+                addFormControlHint( {cssClass: 'loading', text: 'checking...'}, target );
+                usernameAvailabilityQueried = $.ajax(
+                {
+                    url: url,
+                    data: { username: username },
+                    dataType: 'json',
+                    success: function( response )
+                    {
+                        addFormControlHint( response, target )
+                    }
+                });
             });
         });
+        function addFormControlHint( response, target )
+        {
+            target.parent().find( '.form-control-hint' ).remove();
+            var hint = $( '<span/>' );
+            hint.insertAfter( target );
+            hint.addClass( 'form-control-hint' );
+            hint.addClass( response.cssClass );
+            var icon = $( '<i/>' );
+            hint.append( icon );
+            icon.addClass( 'icon' );
+            var text = $( '<span/>' );
+            hint.append( text );
+            text.html( response.text );
+            switch ( response.cssClass )
+            {
+                case 'loading':
+                    icon.addClass( 'icon-spinner icon-spin' );
+                    break;
+                case 'success':
+                    icon.addClass( 'icon-ok-sign' );
+                    break;
+                case 'error':
+                    icon.addClass( 'icon-exclamation-sign' );
+                    break;
+            }
+            hint.delay( 2000 ).fadeOut( 3000 );
+        }
     </script>
 {% endblock %}

@@ -30,7 +30,23 @@ class ProfileController extends Controller
 
     public function saveUsernameAction( Request $request )
     {
-        return $this->redirect( $this->generateUrl( 'wg_profile_edit' ));
+        // Get the User object in question
+        $em = $this->getDoctrine()->getEntityManager();
+        $repo = $em->getRepository( 'WrittenGamesApplicationBundle:User' );
+        $user = $repo->findOneByUsernameCanonical( $request->get( 'canonical_username' ));
+        // Make sure the current user has editing rights
+        $currentUser = $this->get( 'security.context' )->getToken()->getUser();
+        if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
+        {
+            throw new NotFoundHttpException();
+        }
+        // Persist the new username and redirect
+        $user->setUsername( $request->get( 'username' ));
+        $em->flush();
+        return $this->redirect(
+                    $this->generateUrl( 'wg_profile_edit', array(
+                        'canonical_username' => $user->getUsernameCanonical()
+                    )));
     }
 
     public function saveEmailAction( Request $request )
@@ -44,7 +60,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * AJAX action
+     * AJAX action for checking username availability
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -52,19 +68,23 @@ class ProfileController extends Controller
     public function usernameAvailableAction( Request $request )
     {
         $response = array(
-            'class' => 'success',
+            'cssClass' => 'success',
             'text' => 'username is available',
         );
         $repo = $this->getDoctrine()->getRepository( 'WrittenGamesApplicationBundle:User' );
         $user = $repo->findOneByUsernameCanonical( $request->get( 'canonical_username' ));
-        $currentUser = $this->get( 'security.context' )->getToken()->getUser(); // check if admin or same user
+        $currentUser = $this->get( 'security.context' )->getToken()->getUser();
+        if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
+        {
+            throw new NotFoundHttpException();
+        }
         $requestedUsername = $request->get( 'username' );
         if ( $requestedUsername != $user->getUsername() )
         {
             $users = $repo->findByUsername( $requestedUsername );
             if ( count( $users ) > 0 )
             {
-                $response['class'] = 'error';
+                $response['cssClass'] = 'error';
                 $response['text'] = 'username not available';
             }
         }
