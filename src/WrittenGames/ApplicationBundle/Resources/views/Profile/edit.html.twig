@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <div class="container">
+    <div class="container profile">
 
         {# PAGE HEADER #}
         <div class="page-header">
@@ -25,13 +25,13 @@
             {# FORM HEADER #}
             <div class="row">
                 <div class="span12">
-                    <h3 class="text-center">Your user name <small>as it appears on this website</small></h3>
+                    <h3>Your user name <small>as it appears on this website</small></h3>
                 </div>
             </div>
 
             {# FORM ELEMENTS #}
             {% set checkPath = path( 'wg_profile_username_available', { 'canonical_username': user.usernameCanonical } ) %}
-            <div class="row text-center">
+            <div class="row">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
                         <input name="username" value="{{ user.username }}"
@@ -52,12 +52,12 @@
             {# FORM HEADER #}
             <div class="row">
                 <div class="span12">
-                    <h3 class="text-center">{{ foo }} email address</h3>
+                    <h3>{{ foo }} email address</h3>
                 </div>
             </div>
 
             {# FORM ELEMENTS #}
-            <div class="row text-center">
+            <div class="row">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
                         <input name="email" value="{{ user.email }}"
@@ -70,10 +70,14 @@
         </form>
 
         {% set foo = user.password ? 'Change your' : 'Add a' %}
-        <h3 class="text-center">Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+        <h3>Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+
+        <div style="height: 60px;"></div>
 
         {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
-        <h3 class="text-center">Connect {{ foo }} social login</h3>
+        <h3>Connect {{ foo }} social login</h3>
+
+        <div style="height: 80px;"></div>
 
     </div>
 
@@ -107,6 +111,10 @@
                     }
                 });
             });
+            $( '#input_username' ).blur( function()
+            {
+            $( '.form-control-hint' ).fadeOut( 3000 );
+            });
         });
         function addFormControlHint( response, target )
         {
@@ -133,7 +141,6 @@
                     icon.addClass( 'icon-exclamation-sign' );
                     break;
             }
-            hint.delay( 2000 ).fadeOut( 3000 );
         }
     </script>
 {% endblock %}

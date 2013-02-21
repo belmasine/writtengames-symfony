@@ -4,28 +4,24 @@ namespace WrittenGames\ApplicationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends Controller
 {
 
+    const EDIT = 'edit';
+    const SHOW = 'show';
+
     public function editAction( Request $request )
     {
-        $user = $this->getUserByCanonicalUsername( $request->get( 'canonical_username' ));
-        if ( !$user ) throw new NotFoundHttpException();
-        return $this->render( 'WrittenGamesApplicationBundle:Profile:edit.html.twig', array(
-            'user' => $user,
-        ));
+        return $this->showAndEdit( $request, self::EDIT );
     }
 
     public function showAction( Request $request )
     {
-        $user = $this->getUserByCanonicalUsername( $request->get( 'canonical_username' ));
-        if ( !$user ) throw new NotFoundHttpException();
-        return $this->render( 'WrittenGamesApplicationBundle:Profile:show.html.twig', array(
-            'user' => $user,
-        ));
+        return $this->showAndEdit( $request, self::SHOW );
     }
 
     public function saveUsernameAction( Request $request )
@@ -94,11 +90,33 @@ class ProfileController extends Controller
     /**
      * Private methods for use in this Controller's public methods
      */
+
     private function getUserByCanonicalUsername( $canonicalUsername )
     {
         return $this->getDoctrine()
                     ->getRepository( 'WrittenGamesApplicationBundle:User' )
                     ->findOneByUsernameCanonical( $canonicalUsername );
+    }
+
+    private function showAndEdit( Request $request, $action )
+    {
+        $user = $this->getUserByCanonicalUsername( $request->get( 'canonical_username' ));
+        if ( $user )
+        {
+            $currentUser = $this->get( 'security.context' )->getToken()->getUser();
+            if (
+                    self::SHOW == $action
+                    || $currentUser->getId() == $user->getId()
+                    || $this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' )
+            )
+            {
+                return $this->render( 'WrittenGamesApplicationBundle:Profile:' . $action . '.html.twig', array(
+                    'user' => $user,
+                ));
+            }
+            throw new AccessDeniedException();
+        }
+        throw new NotFoundHttpException();
     }
 
 }
