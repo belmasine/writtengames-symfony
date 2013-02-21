@@ -39,13 +39,6 @@ class User extends BaseUser
     /** @ORM\OneToMany(targetEntity="UserIdentity", mappedBy="user") */
     protected $identities;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->email = $this->createUniquePlaceholder();
-        $this->setEmailCanonical( $this->email );
-    }
-
     /**
      * Get id
      *
