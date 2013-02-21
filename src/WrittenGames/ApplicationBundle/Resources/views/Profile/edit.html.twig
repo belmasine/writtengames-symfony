@@ -11,7 +11,6 @@
 
         {# ACCOUNT SETTINGS INFORMATION #}
         <div class="alert alert-info">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
             <i class="icon icon-info-sign"></i>
             Are you looking to change your data, connect a social login to your
             account, or enable traditional login with a password? You can do all
@@ -34,7 +33,7 @@
             <div class="row">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
-                        <input name="username" value="{{ user.username }}"
+                        <input name="username" value="{{ user.username }}" placeholder="Your user name"
                                type="text" class="input input-xlarge" id="input_username"
                                data-availability-check-url="{{ checkPath }}" />
                         <input type="submit" class="btn" value="save" />
@@ -60,7 +59,7 @@
             <div class="row">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
-                        <input name="email" value="{{ user.email }}"
+                        <input name="email" value="{{ user.email }}" placeholder="Your email address"
                                type="text" class="input input-xlarge" id="input_email" />
                         <input type="submit" class="btn" value="save" />
                     </div>
@@ -69,15 +68,56 @@
 
         </form>
 
+        {# PASSWORD FORM #}
         {% set foo = user.password ? 'Change your' : 'Add a' %}
-        <h3>Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+        <form method="POST" class="form-horizontal"
+              action="{{ path( 'wg_profile_save_email', { 'canonical_username': user.usernameCanonical } ) }}">
 
-        <div style="height: 60px;"></div>
+            {# FORM HEADER #}
+            <div class="row">
+                <div class="span12">
+                    <h3>Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+                </div>
+            </div>
+
+            {# FORM ELEMENTS #}
+            <div class="row">
+                <div class="span12 control-group" style="position: relative;">
+                    <label class="control-label">Your new password</label>
+                    <div class="controls">
+                        <input name="password" type="password" id="input_password" placeholder="Your new password" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12 control-group" style="position: relative;">
+                    <label class="control-label">Confirm password</label>
+                    <div class="controls">
+                        <input name="password_confirmation" type="password" id="input_password" placeholder="Confirm password" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="offset1 control-group" style="position: relative;">
+                    <label class="checkbox">
+                        <input type="checkbox" name="send_details" checked="checked"> Send account details to my inbox
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span12 control-group" style="position: relative;">
+                    <div class="controls">
+                        <button type="submit" class="btn">save</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
 
         {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
         <h3>Connect {{ foo }} social login</h3>
 
-        <div style="height: 80px;"></div>
+        <div style="height: 160px;"></div>
 
     </div>
 
