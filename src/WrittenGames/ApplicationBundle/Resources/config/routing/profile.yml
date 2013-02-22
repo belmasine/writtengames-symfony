@@ -1,24 +1,28 @@
 
 wg_profile_show:
-    pattern:  /{canonical_username}
+    pattern:  /{username_slug}
     defaults: { _controller: WrittenGamesApplicationBundle:Profile:show }
 
 wg_profile_edit:
-    pattern:  /{canonical_username}/edit
+    pattern:  /{username_slug}/edit
     defaults: { _controller: WrittenGamesApplicationBundle:Profile:edit }
 
 wg_profile_username_available:
-    pattern:  /{canonical_username}/username-available
+    pattern:  /{username_slug}/username-available
     defaults: { _controller: WrittenGamesApplicationBundle:Profile:usernameAvailable }
 
 wg_profile_save_username:
-    pattern:  /{canonical_username}/change-username
+    pattern:  /{username_slug}/change-username
     defaults: { _controller: WrittenGamesApplicationBundle:Profile:saveUsername }
 
-wg_profile_save_email:
-    pattern:  /{canonical_username}/change-email
-    defaults: { _controller: WrittenGamesApplicationBundle:Profile:saveEmail }
-
 wg_profile_save_password:
-    pattern:  /{canonical_username}/change-password
+    pattern:  /{username_slug}/change-password
     defaults: { _controller: WrittenGamesApplicationBundle:Profile:savePassword }
+
+wg_profile_request_change_email:
+    pattern:  /{username_slug}/change-email
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:requestChangeEmail }
+
+wg_profile_confirm_change_email:
+    pattern:  /{username_slug}/change-email/{confirmation_token}
+    defaults: { _controller: WrittenGamesApplicationBundle:Profile:confirmChangeEmail }

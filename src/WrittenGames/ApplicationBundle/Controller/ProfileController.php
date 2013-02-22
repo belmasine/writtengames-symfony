@@ -26,33 +26,21 @@ class ProfileController extends Controller
 
     public function saveUsernameAction( Request $request )
     {
-        // Get the User object in question
-        $em = $this->getDoctrine()->getEntityManager();
-        $repo = $em->getRepository( 'WrittenGamesApplicationBundle:User' );
-        $user = $repo->findOneByUsernameCanonical( $request->get( 'canonical_username' ));
-        // Make sure the current user has editing rights
-        $currentUser = $this->get( 'security.context' )->getToken()->getUser();
-        if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
-        {
-            throw new NotFoundHttpException();
-        }
-        // Persist the new username and redirect
-        $user->setUsername( $request->get( 'username' ));
-        $em->flush();
-        return $this->redirect(
-                    $this->generateUrl( 'wg_profile_edit', array(
-                        'canonical_username' => $user->getUsernameCanonical()
-                    )));
+        return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'username' );
+    }
+
+    public function requestChangeEmailAction( Request $request )
+    {
     }
 
     public function saveEmailAction( Request $request )
     {
-        return $this->redirect( $this->generateUrl( 'wg_profile_edit' ));
+        return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'email' );
     }
 
     public function savePasswordAction( Request $request )
     {
-        return $this->redirect( $this->generateUrl( 'wg_profile_edit' ));
+        return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'password' );
     }
 
     /**
@@ -68,7 +56,7 @@ class ProfileController extends Controller
             'text' => 'username is available',
         );
         $repo = $this->getDoctrine()->getRepository( 'WrittenGamesApplicationBundle:User' );
-        $user = $repo->findOneByUsernameCanonical( $request->get( 'canonical_username' ));
+        $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
         $currentUser = $this->get( 'security.context' )->getToken()->getUser();
         if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
         {
@@ -77,6 +65,7 @@ class ProfileController extends Controller
         $requestedUsername = $request->get( 'username' );
         if ( $requestedUsername != $user->getUsername() )
         {
+            // TODO: query using slug instead
             $users = $repo->findByUsername( $requestedUsername );
             if ( count( $users ) > 0 )
             {
@@ -91,16 +80,11 @@ class ProfileController extends Controller
      * Private methods for use in this Controller's public methods
      */
 
-    private function getUserByCanonicalUsername( $canonicalUsername )
-    {
-        return $this->getDoctrine()
-                    ->getRepository( 'WrittenGamesApplicationBundle:User' )
-                    ->findOneByUsernameCanonical( $canonicalUsername );
-    }
-
     private function showAndEdit( Request $request, $action )
     {
-        $user = $this->getUserByCanonicalUsername( $request->get( 'canonical_username' ));
+        $user = $this->getDoctrine()
+                     ->getRepository( 'WrittenGamesApplicationBundle:User' )
+                     ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         if ( $user )
         {
             $currentUser = $this->get( 'security.context' )->getToken()->getUser();
@@ -117,6 +101,37 @@ class ProfileController extends Controller
             throw new AccessDeniedException();
         }
         throw new NotFoundHttpException();
+    }
+
+    private function saveUserDataAndGuardAgainstNonPermittedEdit( Request $request, $key )
+    {
+        // Get the User object in question
+        $repo = $this->getDoctrine()->getRepository( 'WrittenGamesApplicationBundle:User' );
+        $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
+        if ( !$user ) throw new NotFoundHttpException();
+        // Make sure the current user has editing rights
+        $currentUser = $this->get( 'security.context' )->getToken()->getUser();
+        if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
+        {
+            throw new AccessDeniedException();
+        }
+        switch ( $key )
+        {
+            case 'username':
+                $user->setUsername( $request->get( $key ));
+                break;
+            case 'email':
+                $user->setEmail( $request->get( $key ));
+                break;
+            case 'password':
+                $user->setPlainPassword( $request->get( $key ));
+                break;
+        }
+        $this->getDoctrine()->getEntityManager()->flush();
+        return $this->redirect(
+                    $this->generateUrl( 'wg_profile_edit', array(
+                        'username_slug' => $user->getUsernameSlug()
+                    )));
     }
 
 }

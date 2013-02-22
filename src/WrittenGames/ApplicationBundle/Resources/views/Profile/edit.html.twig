@@ -6,7 +6,7 @@
 
         {# PAGE HEADER #}
         <div class="page-header">
-            <h1>Your account settings</h1>
+            <h1>Account settings</h1>
         </div>
 
         {# ACCOUNT SETTINGS INFORMATION #}
@@ -19,7 +19,7 @@
 
         {# USERNAME FORM #}
         <form method="POST"
-              action="{{ path( 'wg_profile_save_username', { 'canonical_username': user.usernameCanonical } ) }}">
+              action="{{ path( 'wg_profile_save_username', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <div class="row">
@@ -29,7 +29,7 @@
             </div>
 
             {# FORM ELEMENTS #}
-            {% set checkPath = path( 'wg_profile_username_available', { 'canonical_username': user.usernameCanonical } ) %}
+            {% set checkPath = path( 'wg_profile_username_available', { 'username_slug': user.usernameSlug } ) %}
             <div class="row">
                 <div class="span12" style="position: relative;">
                     <div class="input-append">
@@ -46,7 +46,7 @@
         {# EMAIL FORM #}
         {% set foo = user.email ? 'Change your' : 'Add an' %}
         <form method="POST"
-              action="{{ path( 'wg_profile_save_email', { 'canonical_username': user.usernameCanonical } ) }}">
+              action="{{ path( 'wg_profile_request_change_email', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <div class="row">
@@ -71,7 +71,7 @@
         {# PASSWORD FORM #}
         {% set foo = user.password ? 'Change your' : 'Add a' %}
         <form method="POST" class="form-horizontal"
-              action="{{ path( 'wg_profile_save_email', { 'canonical_username': user.usernameCanonical } ) }}">
+              action="{{ path( 'wg_profile_save_password', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <div class="row">
@@ -80,37 +80,51 @@
                 </div>
             </div>
 
-            {# FORM ELEMENTS #}
-            <div class="row">
-                <div class="span12 control-group" style="position: relative;">
-                    <label class="control-label">Your new password</label>
-                    <div class="controls">
-                        <input name="password" type="password" id="input_password" placeholder="Your new password" />
+            {% if user.email %}
+
+                {# FORM ELEMENTS #}
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <label class="control-label">Your new password</label>
+                        <div class="controls">
+                            <input name="password" type="password" id="input_password" placeholder="Your new password" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="span12 control-group" style="position: relative;">
-                    <label class="control-label">Confirm password</label>
-                    <div class="controls">
-                        <input name="password_confirmation" type="password" id="input_password" placeholder="Confirm password" />
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <label class="control-label">Confirm password</label>
+                        <div class="controls">
+                            <input name="password_confirm" type="password" id="input_password_confirm" placeholder="Confirm password" />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="offset1 control-group" style="position: relative;">
-                    <label class="checkbox">
-                        <input type="checkbox" name="send_details" checked="checked"> Send account details to my inbox
-                    </label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="span12 control-group" style="position: relative;">
-                    <div class="controls">
-                        <button type="submit" class="btn">save</button>
+                <div class="row">
+                    <div class="offset1 control-group" style="position: relative;">
+                        <label class="checkbox">
+                            <input name="send_details" type="checkbox" checked="checked"> Send account details to my inbox
+                        </label>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <div class="controls">
+                            <button type="submit" class="btn">save</button>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div style="height: 40px;">
+                    <span class="alert alert-info">
+                        <i class="icon icon-info-sign"></i>
+                        Before you can set a password for your account, you need to
+                        provide an email address first.
+                    </span>
+                </div>
+
+            {% endif %}
 
         </form>
 

@@ -4,6 +4,7 @@ namespace WrittenGames\ApplicationBundle\Entity;
 
 use WrittenGames\ApplicationBundle\Entity\UserIdentity;
 use FOS\UserBundle\Entity\User as BaseUser;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,8 +37,29 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @Gedmo\Slug(fields={"username"}, separator="-")
+     * @ORM\Column(name="username_slug", type="string", length=127, unique=true)
+     */
+    protected $usernameSlug;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    protected $createdAt;
+
     /** @ORM\OneToMany(targetEntity="UserIdentity", mappedBy="user") */
     protected $identities;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->identities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -55,6 +77,7 @@ class User extends BaseUser
     public function setEmail($email)
     {
         if ( !$email ) $this->setEmailCanonical( NULL );
+        if ( NULL === $email ) $email = '';
         parent::setEmail($email);
     }
 
@@ -97,5 +120,51 @@ class User extends BaseUser
     public function getIdentities()
     {
         return $this->identities;
+    }
+
+    /**
+     * Set usernameSlug
+     *
+     * @param string $usernameSlug
+     * @return User
+     */
+    public function setUsernameSlug($usernameSlug)
+    {
+        $this->usernameSlug = $usernameSlug;
+
+        return $this;
+    }
+
+    /**
+     * Get usernameSlug
+     *
+     * @return string
+     */
+    public function getUsernameSlug()
+    {
+        return $this->usernameSlug;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return User
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }
