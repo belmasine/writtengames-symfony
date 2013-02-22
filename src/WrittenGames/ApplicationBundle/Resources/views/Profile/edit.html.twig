@@ -126,44 +126,49 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        var usernameAvailabilityQueried;
+        var usernameAvailabilityQueryHandle;
         $( function()
         {
-            $( '.form-control-hint' ).show();
             $( '#input_email' ).keyup( function()
             {
                 var target = $( this ).parent();
-                addFormControlHint( {cssClass: 'info', text: 'Changing your email address will require confirmation.'}, target );
+                if ( target.parent().find( '.form-control-hint' ).length ) return;
+                var hintData = {cssClass: 'info', text: 'Changing your email address will require confirmation.'};
+                addFormControlHint( hintData, target );
             });
             $( '#input_username' ).keyup( function()
             {
-                if ( usernameAvailabilityQueried && usernameAvailabilityQueried.readyState != 4 )
-                {
-                    usernameAvailabilityQueried.abort();
-                }
                 var url = $( this ).attr( 'data-availability-check-url' );
                 var username = $( this ).val();
                 var target = $( this ).parent();
+                $( '.form-control-hint' ).remove();
                 addFormControlHint( {cssClass: 'loading', text: 'checking...'}, target );
-                usernameAvailabilityQueried = $.ajax(
+                if ( usernameAvailabilityQueryHandle && usernameAvailabilityQueryHandle.readyState != 4 )
+                {
+                    usernameAvailabilityQueryHandle.abort();
+                }
+                usernameAvailabilityQueryHandle = $.ajax(
                 {
                     url: url,
                     data: { username: username },
                     dataType: 'json',
                     success: function( response )
                     {
-                        addFormControlHint( response, target )
+                        $( '.form-control-hint' ).remove();
+                        window.setTimeout( function()
+                        {
+                            addFormControlHint( response, target );
+                        }, 100);
                     }
                 });
             });
             $( '.input' ).blur( function()
             {
-                $( '.form-control-hint' ).fadeOut( 3000 );
+                $( '.form-control-hint' ).fadeOut( 3000, function() { $( this ).remove() });
             });
         });
         function addFormControlHint( response, target )
         {
-            target.parent().find( '.form-control-hint' ).remove();
             var hint = $( '<span/>' );
             hint.insertAfter( target );
             hint.addClass( 'form-control-hint' );
