@@ -11,6 +11,13 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
 
+    website_domain:               example.com
+    website_system_email_account: no-reply
+
+    mail_subject_emailchange:   Please confirm your email address change request
+    mail_subject_passwordreset: Please confirm your password reset request
+    mail_subject_newpassword:   Your password has been reset
+
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 

@@ -2,6 +2,7 @@
 
 namespace WrittenGames\ApplicationBundle\Controller;
 
+use WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -29,18 +30,91 @@ class ProfileController extends Controller
         return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'username' );
     }
 
-    public function requestChangeEmailAction( Request $request )
-    {
-    }
-
-    public function saveEmailAction( Request $request )
-    {
-        return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'email' );
-    }
-
     public function savePasswordAction( Request $request )
     {
         return $this->saveUserDataAndGuardAgainstNonPermittedEdit( $request, 'password' );
+    }
+
+    public function requestChangeEmailAction( Request $request )
+    {
+        $message  = 'Email address change request received.';
+        $message .= ' Check your inbox for the confirmation email.';
+        if ( $request->isMethod( 'post' ))
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+            $repo = $em->getRepository( 'WrittenGamesApplicationBundle:User' );
+            $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
+            if ( !$em->getRepository( 'WrittenGamesApplicationBundle:UserEmailChangeRequest' )->isAllowedRequest( $user ))
+            {
+                $message  = 'You are currently not allowed to request this email address change.';
+                $message .= ' Please contact an administrator for more information.';
+            }
+            else
+            {
+                $email = $request->get( 'email' );
+                $canonicalEmail = $this->get( 'fos_user.util.email_canonicalizer' )->canonicalize( $email );
+                if ( $repo->findOneByEmailCanonical( $canonicalEmail ))
+                {
+                    $message  = 'Email address already in use.';
+                    $message .= ' Please contact an administrator for more information.';
+                }
+                else
+                {
+                    $changeRequest = new UserEmailChangeRequest();
+                    $changeRequest->setUser( $user );
+                    $token = substr( $this->get( 'fos_user.util.token_generator' )->generateToken(), 0, 12 );
+                    $changeRequest->setConfirmationToken( $token );
+                    $changeRequest->setEmail( $email );
+                    $em->persist( $changeRequest );
+                    $em->flush();
+                    // TODO: send confirmation email to new address
+                    $domain = 'www.' . $this->container->getParameter( 'website_domain' );
+                    $url = 'http://' . $domain . str_replace(
+                                '/app_dev.php', '',
+                                $this->generateUrl( 'wg_profile_confirm_change_email', array(
+                                    'confirmation_token' => $token,
+                                )
+                            ));
+                    $this->get( 'wg.email' )->send(
+                        $canonicalEmail,
+                        $this->container->getParameter( 'mail_subject_emailchange' ),
+                        $this->renderView( 'WrittenGamesApplicationBundle:Email:emailchangerequest.html.twig', array(
+                            'name' => $user->getUsername(),
+                            'website' => $domain,
+                            'email' => $email,
+                            'url' => $url,
+                        ))
+                    );
+                    // Redirect to self
+                    return $this->redirect(
+                                $this->generateUrl( 'wg_profile_request_change_email', array(
+                                    'username_slug' => $user->getUsernameSlug(),
+                                )));
+                }
+            }
+        }
+        return $this->render( 'WrittenGamesApplicationBundle:Default:message.html.twig', array(
+                                'message' => $message,
+                            ));
+    }
+
+    public function confirmChangeEmailAction( Request $request )
+    {
+        $token = $request->get( 'confirmation_token' );
+        if ( !$token ) throw new NotFoundHttpException();
+        $em = $this->getDoctrine()->getEntityManager();
+        $repo = $em->getRepository( 'WrittenGamesApplicationBundle:UserEmailChangeRequest' );
+        $changeRequest = $repo->findOneBy( array(
+                                    'confirmationToken' => $token,
+                                    'confirmed' => false,
+                                ));
+        $changeRequest->setConfirmationToken( NULL );
+        $changeRequest->setConfirmed( true );
+        $changeRequest->getUser()->setEmail( $changeRequest->getEmail() );
+        $em->flush();
+        return $this->render( 'WrittenGamesApplicationBundle:Default:message.html.twig', array(
+                                'message' => 'Your email address has been changed.',
+                            ));
     }
 
     /**
@@ -63,10 +137,10 @@ class ProfileController extends Controller
             throw new NotFoundHttpException();
         }
         $requestedUsername = $request->get( 'username' );
+        $canonicalUsername = $this->get( 'fos_user.util.username_canonicalizer' )->canonicalize( $requestedUsername );
         if ( $requestedUsername != $user->getUsername() )
         {
-            // TODO: query using slug instead
-            $users = $repo->findByUsername( $requestedUsername );
+            $users = $repo->findByUsernameCanonical( $canonicalUsername );
             if ( count( $users ) > 0 )
             {
                 $response['cssClass'] = 'error';
@@ -119,9 +193,6 @@ class ProfileController extends Controller
         {
             case 'username':
                 $user->setUsername( $request->get( $key ));
-                break;
-            case 'email':
-                $user->setEmail( $request->get( $key ));
                 break;
             case 'password':
                 $user->setPlainPassword( $request->get( $key ));

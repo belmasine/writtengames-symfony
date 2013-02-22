@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="WrittenGames\ApplicationBundle\Entity\Repository\UserRepository")
+ * @ORM\Entity
  * @ORM\Table(name="user__user")
  */
 class User extends BaseUser
@@ -40,7 +40,7 @@ class User extends BaseUser
 
     /**
      * @Gedmo\Slug(fields={"username"}, separator="-")
-     * @ORM\Column(name="username_slug", type="string", length=127, unique=true)
+     * @ORM\Column(name="username_slug", type="string", length=255, unique=true)
      */
     protected $usernameSlug;
 

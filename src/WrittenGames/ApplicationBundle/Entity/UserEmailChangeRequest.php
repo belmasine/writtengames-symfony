@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="WrittenGames\ApplicationBundle\Entity\Repository\UserEmailChangeRequestRepository")
  * @ORM\Table(name="user__emailchangerequest")
  */
 class UserEmailChangeRequest
@@ -22,10 +22,10 @@ class UserEmailChangeRequest
     /** @ORM\ManyToOne(targetEntity="User", cascade={"persist"}, inversedBy="emailChangeRequests") */
     protected $user;
 
-    /** @ORM\Column(type="string", length=255, nullable=true) */
+    /** @ORM\Column(type="string", length=255) */
     protected $email;
 
-    /** @ORM\Column(type="string", length=255, name="confirmation_token") */
+    /** @ORM\Column(type="string", length=255, name="confirmation_token", nullable=true) */
     protected $confirmationToken;
 
     /** @ORM\Column(type="boolean") */

@@ -93,7 +93,7 @@ latter must be called explicitly.
 
 When calling it in the browser, try using the `app_dev.php` front controller:
 
-    http://www.writtengames.sf2/app_dev.php
+    http://www.writtengames.local/app_dev.php
 
 Note the debug / profiler bar at the bottom which will be rendered in the `dev`
 environment.

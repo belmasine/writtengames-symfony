@@ -4,6 +4,7 @@ parameters:
     wg.security.user_provider.class:      WrittenGames\ApplicationBundle\Security\UserProvider
     wg.util.canonicaliser.class:          WrittenGames\ApplicationBundle\Util\Canonicaliser
     wg.twig.application_extension.class:  WrittenGames\ApplicationBundle\Twig\Extension\ApplicationExtension
+    wg.email.class:                       WrittenGames\ApplicationBundle\Util\Email
 
 services:
 
@@ -25,3 +26,10 @@ services:
             - '@service_container'
         tags:
             - { name: twig.extension }
+
+    wg.email:
+        class: %wg.email.class%
+        arguments:
+            - '@mailer'
+            - %website_system_email_account%
+            - %website_domain%
