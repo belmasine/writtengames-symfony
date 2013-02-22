@@ -54,7 +54,7 @@ class UserEmailChangeRequest
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -70,14 +70,14 @@ class UserEmailChangeRequest
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -93,14 +93,14 @@ class UserEmailChangeRequest
     public function setConfirmationToken($confirmationToken)
     {
         $this->confirmationToken = $confirmationToken;
-    
+
         return $this;
     }
 
     /**
      * Get confirmationToken
      *
-     * @return string 
+     * @return string
      */
     public function getConfirmationToken()
     {
@@ -116,14 +116,14 @@ class UserEmailChangeRequest
     public function setConfirmed($confirmed)
     {
         $this->confirmed = $confirmed;
-    
+
         return $this;
     }
 
     /**
      * Get confirmed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getConfirmed()
     {
@@ -139,14 +139,14 @@ class UserEmailChangeRequest
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -162,14 +162,14 @@ class UserEmailChangeRequest
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -182,17 +182,17 @@ class UserEmailChangeRequest
      * @param \WrittenGames\ApplicationBundle\Entity\User $user
      * @return UserEmailChangeRequest
      */
-    public function setUser(\WrittenGames\ApplicationBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \WrittenGames\ApplicationBundle\Entity\User 
+     * @return \WrittenGames\ApplicationBundle\Entity\User
      */
     public function getUser()
     {

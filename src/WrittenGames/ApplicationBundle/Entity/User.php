@@ -3,6 +3,7 @@
 namespace WrittenGames\ApplicationBundle\Entity;
 
 use WrittenGames\ApplicationBundle\Entity\UserIdentity;
+use WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -52,6 +53,9 @@ class User extends BaseUser
     /** @ORM\OneToMany(targetEntity="UserIdentity", mappedBy="user") */
     protected $identities;
 
+    /** @ORM\OneToMany(targetEntity="UserEmailChangeRequest", mappedBy="user") */
+    protected $emailChangeRequests;
+
     /**
      * Constructor
      */
@@ -59,6 +63,7 @@ class User extends BaseUser
     {
         parent::__construct();
         $this->identities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->emailChangeRequests = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -166,5 +171,38 @@ class User extends BaseUser
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Add emailChangeRequest
+     *
+     * @param \WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest $emailChangeRequest
+     * @return User
+     */
+    public function addEmailChangeRequest(UserEmailChangeRequest $emailChangeRequest)
+    {
+        $this->emailChangeRequests[] = $emailChangeRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailChangeRequest
+     *
+     * @param \WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest $emailChangeRequest
+     */
+    public function removeEmailChangeRequest(UserEmailChangeRequest $emailChangeRequest)
+    {
+        $this->emailChangeRequests->removeElement($emailChangeRequest);
+    }
+
+    /**
+     * Get emailChangeRequest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmailChangeRequests()
+    {
+        return $this->emailChangeRequests;
     }
 }
