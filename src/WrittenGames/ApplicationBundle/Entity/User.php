@@ -79,7 +79,7 @@ class User extends BaseUser
     /**
      * {@inheritDoc}
      */
-    public function setEmail($email)
+    public function setEmail( $email )
     {
         if ( !$email ) $this->setEmailCanonical( NULL );
         if ( NULL === $email ) $email = '';
@@ -93,6 +93,50 @@ class User extends BaseUser
     {
         $emailCanonical = $emailCanonical ?: $this->createUniquePlaceholder();
         parent::setEmailCanonical( $emailCanonical );
+    }
+
+    /**
+     * Set usernameSlug
+     *
+     * @param string $usernameSlug
+     * @return User
+     */
+    public function setUsernameSlug( $usernameSlug )
+    {
+        $this->usernameSlug = $usernameSlug;
+        return $this;
+    }
+
+    /**
+     * Get usernameSlug
+     *
+     * @return string
+     */
+    public function getUsernameSlug()
+    {
+        return $this->usernameSlug;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return User
+     */
+    public function setCreatedAt( $createdAt )
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 
     /**
@@ -128,61 +172,14 @@ class User extends BaseUser
     }
 
     /**
-     * Set usernameSlug
-     *
-     * @param string $usernameSlug
-     * @return User
-     */
-    public function setUsernameSlug($usernameSlug)
-    {
-        $this->usernameSlug = $usernameSlug;
-
-        return $this;
-    }
-
-    /**
-     * Get usernameSlug
-     *
-     * @return string
-     */
-    public function getUsernameSlug()
-    {
-        return $this->usernameSlug;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return User
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * Add emailChangeRequest
      *
      * @param \WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest $emailChangeRequest
      * @return User
      */
-    public function addEmailChangeRequest(UserEmailChangeRequest $emailChangeRequest)
+    public function addEmailChangeRequest( UserEmailChangeRequest $emailChangeRequest )
     {
         $this->emailChangeRequests[] = $emailChangeRequest;
-
         return $this;
     }
 
@@ -191,9 +188,9 @@ class User extends BaseUser
      *
      * @param \WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest $emailChangeRequest
      */
-    public function removeEmailChangeRequest(UserEmailChangeRequest $emailChangeRequest)
+    public function removeEmailChangeRequest( UserEmailChangeRequest $emailChangeRequest )
     {
-        $this->emailChangeRequests->removeElement($emailChangeRequest);
+        $this->emailChangeRequests->removeElement( $emailChangeRequest );
     }
 
     /**

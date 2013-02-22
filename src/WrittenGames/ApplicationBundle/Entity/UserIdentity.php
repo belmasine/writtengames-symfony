@@ -139,7 +139,6 @@ class UserIdentity
     public function setIdentifier( $identifier )
     {
         $this->identifier = $identifier;
-
         return $this;
     }
 
@@ -162,7 +161,6 @@ class UserIdentity
     public function setAccessToken( $accessToken )
     {
         $this->accessToken = $accessToken;
-
         return $this;
     }
 
@@ -185,7 +183,6 @@ class UserIdentity
     public function setUser( User $user = null )
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -208,7 +205,6 @@ class UserIdentity
     public function setName( $name )
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -231,7 +227,6 @@ class UserIdentity
     public function setEmail( $email )
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -251,17 +246,16 @@ class UserIdentity
      * @param \DateTime $updatedAt
      * @return UserIdentity
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt( $updatedAt )
     {
         $this->updatedAt = $updatedAt;
-    
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -274,17 +268,16 @@ class UserIdentity
      * @param \DateTime $createdAt
      * @return UserIdentity
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt( $createdAt )
     {
         $this->createdAt = $createdAt;
-    
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

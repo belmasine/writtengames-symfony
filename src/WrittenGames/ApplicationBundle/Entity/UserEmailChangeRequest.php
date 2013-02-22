@@ -67,10 +67,9 @@ class UserEmailChangeRequest
      * @param string $email
      * @return UserEmailChangeRequest
      */
-    public function setEmail($email)
+    public function setEmail( $email )
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -90,10 +89,9 @@ class UserEmailChangeRequest
      * @param string $confirmationToken
      * @return UserEmailChangeRequest
      */
-    public function setConfirmationToken($confirmationToken)
+    public function setConfirmationToken( $confirmationToken )
     {
         $this->confirmationToken = $confirmationToken;
-
         return $this;
     }
 
@@ -113,10 +111,9 @@ class UserEmailChangeRequest
      * @param boolean $confirmed
      * @return UserEmailChangeRequest
      */
-    public function setConfirmed($confirmed)
+    public function setConfirmed( $confirmed )
     {
         $this->confirmed = $confirmed;
-
         return $this;
     }
 
@@ -136,10 +133,9 @@ class UserEmailChangeRequest
      * @param \DateTime $updatedAt
      * @return UserEmailChangeRequest
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt( $updatedAt )
     {
         $this->updatedAt = $updatedAt;
-
         return $this;
     }
 
@@ -159,10 +155,9 @@ class UserEmailChangeRequest
      * @param \DateTime $createdAt
      * @return UserEmailChangeRequest
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt( $createdAt )
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
@@ -182,10 +177,9 @@ class UserEmailChangeRequest
      * @param \WrittenGames\ApplicationBundle\Entity\User $user
      * @return UserEmailChangeRequest
      */
-    public function setUser(User $user = null)
+    public function setUser( User $user = null )
     {
         $this->user = $user;
-
         return $this;
     }
 
