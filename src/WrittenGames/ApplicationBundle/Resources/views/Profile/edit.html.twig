@@ -70,13 +70,13 @@
 
         {# PASSWORD FORM #}
         {% set foo = user.password ? 'Change your' : 'Add a' %}
-        <form method="POST" class="form-horizontal"
+        <form method="POST" class="form-horizontal" id="password_form"
               action="{{ path( 'wg_profile_save_password', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <div class="row">
                 <div class="span12">
-                    <h3>Add a password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
+                    <h3>{{ foo }} password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h3>
                 </div>
             </div>
 
@@ -87,7 +87,7 @@
                     <div class="span12 control-group" style="position: relative;">
                         <label class="control-label">Your new password</label>
                         <div class="controls">
-                            <input name="password" type="password" id="input_password" placeholder="Your new password" />
+                            <input name="password" type="password" id="input_password" class="input" placeholder="Your new password" />
                         </div>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                     <div class="span12 control-group" style="position: relative;">
                         <label class="control-label">Confirm password</label>
                         <div class="controls">
-                            <input name="password_confirm" type="password" id="input_password_confirm" placeholder="Confirm password" />
+                            <input name="password_confirm" type="password" id="input_password_confirm" class="input" placeholder="Confirm password" />
                         </div>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div class="row">
                     <div class="span12 control-group" style="position: relative;">
                         <div class="controls">
-                            <button type="submit" class="btn">save</button>
+                            <button type="submit" class="btn" id="password_form_submit">save</button>
                         </div>
                     </div>
                 </div>
@@ -143,6 +143,21 @@
         var usernameAvailabilityQueryHandle;
         $( function()
         {
+            $( '#password_form_submit' ).click( function()
+            {
+                if ( '' == $( '#input_password' ).val() )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'password cannot be empty'}, $( '#input_password' ) );
+                }
+                else if ( $( '#input_password' ).val() != $( '#input_password_confirm' ).val() )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'passwords must match'}, $( '#input_password_confirm' ) );
+                }
+                else if ( $( '#input_password' ).val().length < 6 )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'password must be at least 6 characters'}, $( '#input_password' ) );
+                }
+            });
             $( '#input_email' ).keyup( function()
             {
                 var target = $( this ).parent();
@@ -155,7 +170,6 @@
                 var url = $( this ).attr( 'data-availability-check-url' );
                 var username = $( this ).val();
                 var target = $( this ).parent();
-                $( '.form-control-hint' ).remove();
                 addFormControlHint( {cssClass: 'loading', text: 'checking...'}, target );
                 if ( usernameAvailabilityQueryHandle && usernameAvailabilityQueryHandle.readyState != 4 )
                 {
@@ -183,6 +197,7 @@
         });
         function addFormControlHint( response, target )
         {
+                $( '.form-control-hint' ).remove();
             var hint = $( '<span/>' );
             hint.insertAfter( target );
             hint.addClass( 'form-control-hint' );

@@ -67,7 +67,7 @@ class ProfileController extends Controller
                     $changeRequest->setEmail( $email );
                     $em->persist( $changeRequest );
                     $em->flush();
-                    // TODO: send confirmation email to new address
+                    // send confirmation email to new address
                     $domain = 'www.' . $this->container->getParameter( 'website_domain' );
                     $url = 'http://' . $domain . str_replace(
                                 '/app_dev.php', '',
@@ -195,9 +195,31 @@ class ProfileController extends Controller
                 $user->setUsername( $request->get( $key ));
                 break;
             case 'password':
-                $user->setPlainPassword( $request->get( $key ));
+                $password = $request->get( $key );
+                $user->setPlainPassword( $password );
+                if ( $request->get( 'send_details' ))
+                {
+                    // Send email with account details
+                    $domain = 'www.' . $this->container->getParameter( 'website_domain' );
+                    $url = 'http://' . $domain . str_replace(
+                                '/app_dev.php', '',
+                                $this->generateUrl( 'fos_user_security_login' )
+                            );
+                    $this->get( 'wg.email' )->send(
+                        $canonicalEmail,
+                        $this->container->getParameter( 'mail_subject_emailchange' ),
+                        $this->renderView( 'WrittenGamesApplicationBundle:Email:emailchangerequest.html.twig', array(
+                            'name' => $user->getUsername(),
+                            'website' => $domain,
+                            'email' => $user->getEmailCanonical(),
+                            'password' => $password,
+                            'url' => $url,
+                        ))
+                    );
+                }
                 break;
         }
+        $this->get( 'fos_user.user_manager' )->updateUser( $user );
         $this->getDoctrine()->getEntityManager()->flush();
         return $this->redirect(
                     $this->generateUrl( 'wg_profile_edit', array(
