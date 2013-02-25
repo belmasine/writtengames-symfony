@@ -189,6 +189,16 @@ span.form-control-hint.loading {
     background-repeat: no-repeat;
 }
 
+div.connect-social-login {
+    margin: 20px 20px 20px 0;
+    display: inline;
+}
+
+div.connect-social-login img {
+    width: 32px;
+    height: 32px;
+}
+
 /*'''''''''''''''''''''''''''''''''*\
 |   TEMPORARY BOOTSTRAP OVERRIDES   |
 \*_________________________________*/

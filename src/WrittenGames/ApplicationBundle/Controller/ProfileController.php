@@ -193,6 +193,7 @@ class ProfileController extends Controller
         {
             case 'username':
                 $user->setUsername( $request->get( $key ));
+                $this->get( 'session' )->getFlashBag()->add( 'success', 'User name was successfully set.' );
                 break;
             case 'password':
                 $password = $request->get( $key );
@@ -206,7 +207,7 @@ class ProfileController extends Controller
                                 $this->generateUrl( 'fos_user_security_login' )
                             );
                     $this->get( 'wg.email' )->send(
-                        $canonicalEmail,
+                        $user->getEmailCanonical(),
                         $this->container->getParameter( 'mail_subject_emailchange' ),
                         $this->renderView( 'WrittenGamesApplicationBundle:Email:emailchangerequest.html.twig', array(
                             'name' => $user->getUsername(),
@@ -217,6 +218,7 @@ class ProfileController extends Controller
                         ))
                     );
                 }
+                $this->get( 'session' )->getFlashBag()->add( 'success', 'Password was successfully set.' );
                 break;
         }
         $this->get( 'fos_user.user_manager' )->updateUser( $user );

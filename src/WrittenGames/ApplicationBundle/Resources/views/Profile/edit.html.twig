@@ -17,6 +17,15 @@
             that here in your account settings.
         </div>
 
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for key, message in messages %}
+                <div class="alert alert-{{ type }}" style="width: 320px;">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {# USERNAME FORM #}
         <form method="POST"
               action="{{ path( 'wg_profile_save_username', { 'username_slug': user.usernameSlug } ) }}">
@@ -120,7 +129,7 @@
                     <span class="alert alert-info">
                         <i class="icon icon-info-sign"></i>
                         Before you can set a password for your account, you need to
-                        provide an email address first.
+                        provide an email address.
                     </span>
                 </div>
 
@@ -128,10 +137,32 @@
 
         </form>
 
-        {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
-        <h3>Connect {{ foo }} social login</h3>
+        {% if hwi_oauth_resource_owners()|length > user.identities|length %}
 
-        <div style="height: 160px;"></div>
+            {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
+            <h3>Connect {{ foo }} social login</h3>
+
+            <div style="margin-bottom: 20px;">
+                <p>Already connected:</p>
+                {% for identity in user.identities %}
+                    <div class="connect-social-login">
+                        <img src="/bundles/writtengamesapplication/img/social/{{ identity.typeString }}.png" />
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <p>Not yet connected:</p>
+                {% for owner in hwi_oauth_resource_owners() %}
+                    {% if owner not in user.identitiesAsStrings %}
+                        <div class="connect-social-login">
+                            <img src="/bundles/writtengamesapplication/img/social/{{ owner }}.png" />
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        {% endif %}
 
     </div>
 

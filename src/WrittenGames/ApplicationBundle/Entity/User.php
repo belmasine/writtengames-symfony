@@ -172,6 +172,21 @@ class User extends BaseUser
     }
 
     /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentitiesAsStrings()
+    {
+        $result = array();
+        foreach ( $this->identities as $identity )
+        {
+            $result[] = $identity->getTypeString();
+        }
+        return $result;
+    }
+
+    /**
      * Add emailChangeRequest
      *
      * @param \WrittenGames\ApplicationBundle\Entity\UserEmailChangeRequest $emailChangeRequest
