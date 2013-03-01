@@ -1,7 +1,7 @@
 {% extends 'HWIOAuthBundle::layout.html.twig' %}
 
 {% block hwi_oauth_content %}
-    <h3>{{ 'header.connecting' | trans({}, 'HWIOAuthBundle')}}</h3>
+    <h3>Connect your Google identity to this account?</h3>
     <div class="row">
         <div class="span6">
             <p>{{ 'connect.confirm.text' | trans({'%service%': service | trans({}, 'HWIOAuthBundle'), '%name%': userInformation.realName}, 'HWIOAuthBundle') }}</p>

@@ -156,7 +156,12 @@
                 {% for owner in hwi_oauth_resource_owners() %}
                     {% if owner not in user.identitiesAsStrings %}
                         <div class="connect-social-login">
-                            <img src="/bundles/writtengamesapplication/img/social/{{ owner }}.png" />
+                            {% spaceless %}
+                                {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
+                                <a href="{{ hwi_oauth_login_url(owner) }}">
+                                    <img src="/bundles/writtengamesapplication/img/social/{{ owner }}.png" />
+                                </a>
+                            {% endspaceless %}
                         </div>
                     {% endif %}
                 {% endfor %}
