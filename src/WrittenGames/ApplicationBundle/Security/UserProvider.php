@@ -41,21 +41,26 @@ class UserProvider implements OAuthAwareUserProviderInterface
      */
     public function connect( $user, UserResponseInterface $response )
     {
-        /**
-         * TODO: rewrite this method according to new model
-         */
-        $this->eventDispatcher->dispatch(
-                                    UserAccountMergedEvent::ID,
-                                    new UserAccountMergedEvent( 'User accounts merged' )
-                                );
-        /**
-         *  tag your event listener like so:
-         *  - { name: kernel.event_listener, event: security.user_accounts_merged, method: onEvent }
-         */
-        $this->createIdentity( $user, $response );
-        // Note:
-        // original bundle method "disconnected" previously,
-        // connected users not sure if that's really necessary
+        $existingIdentity = $this->getExistingIdentity( $response );
+        if ( $existingIdentity )
+        {
+            $previousUser = $existingIdentity->getUser();
+            $event = new UserAccountMergedEvent( 'User accounts merged' );
+            $event->setMergedUser( $previousUser );
+            $event->setMergingUser( $user );
+            $this->eventDispatcher->dispatch( UserAccountMergedEvent::ID, $event );
+            /**
+             *  tag your event listener like so:
+             *  - { name: kernel.event_listener, event: security.user_accounts_merged, method: onEvent }
+             */
+            $existingIdentity->setUser( $user );
+            $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
+            $this->identityManager->updateIdentity( $existingIdentity );
+        }
+        else
+        {
+            $this->createIdentity( $user, $response );
+        }
     }
 
     /**
@@ -66,6 +71,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $existingIdentity = $this->getExistingIdentity( $response );
         if ( $existingIdentity )
         {
+            $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
             return $existingIdentity->getUser();
         }
         return $this->createUser( $response );
@@ -79,16 +85,10 @@ class UserProvider implements OAuthAwareUserProviderInterface
      */
     protected function getExistingIdentity( UserResponseInterface $response )
     {
-        $criteria = array(
+        return $this->identityManager->findIdentityBy( array(
             'identifier' => $response->getUsername(),
             'type' => $response->getResourceOwner()->getName(),
-        );
-        $existingIdentity = $this->identityManager->findIdentityBy( $criteria );
-        if ( $existingIdentity )
-        {
-            $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
-        }
-        return $existingIdentity;
+        ));
     }
 
     /**

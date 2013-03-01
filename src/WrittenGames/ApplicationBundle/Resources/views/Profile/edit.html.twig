@@ -137,35 +137,35 @@
 
         </form>
 
+        {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
+        <h3>Connect {{ foo }} social login</h3>
+
+        <div style="margin-bottom: 20px;">
+            <p>Already connected:</p>
+            {% for identity in user.identities %}
+                <div class="connect-social-login">
+                    <img src="/bundles/writtengamesapplication/img/social/{{ identity.typeString }}.png" />
+                </div>
+            {% endfor %}
+        </div>
+
         {% if hwi_oauth_resource_owners()|length > user.identities|length %}
 
-            {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
-            <h3>Connect {{ foo }} social login</h3>
-
-            <div style="margin-bottom: 20px;">
-                <p>Already connected:</p>
-                {% for identity in user.identities %}
+        <div style="margin-bottom: 20px;">
+            <p>Not yet connected:</p>
+            {% for owner in hwi_oauth_resource_owners() %}
+                {% if owner not in user.identitiesAsStrings %}
                     <div class="connect-social-login">
-                        <img src="/bundles/writtengamesapplication/img/social/{{ identity.typeString }}.png" />
+                        {% spaceless %}
+                            {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
+                            <a href="{{ hwi_oauth_login_url(owner) }}">
+                                <img src="/bundles/writtengamesapplication/img/social/{{ owner }}.png" />
+                            </a>
+                        {% endspaceless %}
                     </div>
-                {% endfor %}
-            </div>
-
-            <div style="margin-bottom: 20px;">
-                <p>Not yet connected:</p>
-                {% for owner in hwi_oauth_resource_owners() %}
-                    {% if owner not in user.identitiesAsStrings %}
-                        <div class="connect-social-login">
-                            {% spaceless %}
-                                {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
-                                <a href="{{ hwi_oauth_login_url(owner) }}">
-                                    <img src="/bundles/writtengamesapplication/img/social/{{ owner }}.png" />
-                                </a>
-                            {% endspaceless %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
+                {% endif %}
+            {% endfor %}
+        </div>
 
         {% endif %}
 
