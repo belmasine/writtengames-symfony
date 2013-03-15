@@ -17,6 +17,15 @@ userfriendly_social_user:
             type:                twitter
             client_id:           %twitter_client_id%
             client_secret:       %twitter_client_secret%
+        google:
+            type:                google
+            client_id:           %google_client_id%
+            client_secret:       %google_client_secret%
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+        yahoo:
+            type:                yahoo
+            client_id:           %yahoo_client_id%
+            client_secret:       %yahoo_client_secret%
 
 framework:
     #esi:             ~

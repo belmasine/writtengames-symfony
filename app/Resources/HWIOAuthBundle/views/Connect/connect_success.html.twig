@@ -4,7 +4,7 @@
     <div class="container">
         <div class="alert-info">
             You have successfully connected your identity "{{ userInformation.realName }}" to your
-            <a href="{{ path( 'wg_profile_edit', { 'username_slug': app.user.usernameSlug }) }}">account</a>.
+            <a href="{{ path( 'uf_profile_edit', { 'username_slug': app.user.usernameSlug }) }}">account</a>.
         </div>
     </div>
 {% endblock hwi_oauth_content %}
