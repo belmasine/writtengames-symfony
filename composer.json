@@ -5,7 +5,8 @@
         "psr-0": { "": "src/" }
     },
     "repositories": [
-        { "type": "vcs", "url": "https://github.com/WrittenGames/OpenIdUserBundle" }
+        { "type": "vcs", "url": "https://github.com/userfriendly/SocialUserBundle" },
+        { "type": "vcs", "url": "https://github.com/userfriendly/UtilityBundle" }
     ],
     "require": {
         "php": ">=5.3.3",
@@ -24,8 +25,8 @@
 
         ,"doctrine/doctrine-fixtures-bundle": "dev-master"
         ,"stof/doctrine-extensions-bundle": "dev-master"
-        ,"hwi/oauth-bundle": "*"
-        ,"friendsofsymfony/user-bundle": "*"
+        ,"userfriendly/social-user-bundle": "*"
+        ,"userfriendly/utility-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [
