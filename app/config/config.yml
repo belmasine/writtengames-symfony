@@ -5,7 +5,7 @@ imports:
 userfriendly_social_user:
     db_driver: orm
     firewall_name: main
-    user_class: Acme\UserBundle\Entity\User
+    user_class: WrittenGames\ApplicationBundle\Entity\User
 #    group_class: Acme\UserBundle\Entity\Group
     resource_owners:
         facebook:
