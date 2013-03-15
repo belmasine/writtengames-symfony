@@ -2,55 +2,21 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
-fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+userfriendly_social_user:
+    db_driver: orm
     firewall_name: main
-    user_class: WrittenGames\ApplicationBundle\Entity\User
-
-hwi_oauth:
-    # name of the firewall in which this bundle is active, this setting MUST be set
+    user_class: Acme\UserBundle\Entity\User
+#    group_class: Acme\UserBundle\Entity\Group
     resource_owners:
         facebook:
             type:                facebook
             client_id:           %facebook_client_id%
             client_secret:       %facebook_client_secret%
             scope:               "email"
-#            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
         twitter:
             type:                twitter
             client_id:           %twitter_client_id%
             client_secret:       %twitter_client_secret%
-#            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
-        google:
-            type:                google
-            client_id:           %google_client_id%
-            client_secret:       %google_client_secret%
-            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-#            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
-        yahoo:
-            type:                yahoo
-            client_id:           %yahoo_client_id%
-            client_secret:       %yahoo_client_secret%
-#            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
-#            paths:
-#                identifier: id
-#                nickname:   username
-#                email:      email
-    firewall_name: main
-    fosub:
-        username_iterations: 30
-        properties: []
-    connect:
-        account_connector: wg.security.user_provider
-    http_client:
-        timeout:       20
-        verify_peer:   true
-        ignore_errors: true
-        max_redirects: 5
 
 framework:
     #esi:             ~
